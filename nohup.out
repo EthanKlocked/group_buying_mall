@@ -1,0 +1,37 @@
+
+> fairdeal@0.1.0 start
+> react-scripts start
+
+npm ERR! path /home/ethank/react/fairdeal/fairdeal
+npm ERR! command failed
+npm ERR! signal SIGHUP
+npm ERR! command sh -c react-scripts start
+
+npm ERR! A complete log of this run can be found in:
+npm ERR!     /home/ethank/.npm/_logs/2022-05-04T07_13_04_838Z-debug-0.log
+
+> fairdeal@0.1.0 start
+> react-scripts start
+
+(node:17704) [DEP_WEBPACK_DEV_SERVER_ON_AFTER_SETUP_MIDDLEWARE] DeprecationWarning: 'onAfterSetupMiddleware' option is deprecated. Please use the 'setupMiddlewares' option.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+(node:17704) [DEP_WEBPACK_DEV_SERVER_ON_BEFORE_SETUP_MIDDLEWARE] DeprecationWarning: 'onBeforeSetupMiddleware' option is deprecated. Please use the 'setupMiddlewares' option.
+Starting the development server...
+
+Compiled successfully!
+
+You can now view fairdeal in the browser.
+
+  http://localhost:3000
+
+Note that the development build is not optimized.
+To create a production build, use npm run build.
+
+webpack compiled successfully
+npm ERR! path /home/ethank/react/fairdeal/fairdeal
+npm ERR! command failed
+npm ERR! signal SIGHUP
+npm ERR! command sh -c react-scripts start
+
+npm ERR! A complete log of this run can be found in:
+npm ERR!     /home/ethank/.npm/_logs/2022-05-04T07_16_46_901Z-debug-0.log
