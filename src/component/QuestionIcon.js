@@ -25,7 +25,7 @@ const QuestionIcon = React.memo(({title = null, content=null}) => {
             <Modal 
                 option={{
                     width : "80%", 
-                    height : "60%", 
+                    height : "40%", 
                     textAlign : "left", 
                     alignContent : "start",  
                     fontSize : "0.2em", 

@@ -1,7 +1,10 @@
 import axios from "axios";
 
 const vnotiCall = axios.create({
+    /*TEST*/
     baseURL: `${process.env.REACT_APP_VNOTI_URL}/api`,
+    /*REAL FOR BUILD*/
+    //baseURL: `${process.env.REACT_APP_SERVER_URL}/api_v`,
     headers: {
         "Content-Type": "application/json",
     },

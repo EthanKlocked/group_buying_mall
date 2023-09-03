@@ -38,7 +38,7 @@ const MailInput = React.memo(({changeHandler = null}) => {
 
     //func
     const handlePress = (e) => {
-        setInputValue(e.target.value.replace(/[^a-z0-9_-]/gi,''));
+        setInputValue(e.target.value);
     }
 
     return (

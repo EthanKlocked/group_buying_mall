@@ -127,7 +127,8 @@ const StyledOrderPoint = styled.div`
     font-size:0.8em;
     color:#aaa;
     margin: 0.3em 0;
-    display:${(props) => props.pointYn? 'block' : 'none'}
+    display: flex;
+    align-items:${(props) => props.pointYn? 'flex-start' : 'center'};
 `;
 const StyledOrderTotal = styled.div`
     text-align:start;
@@ -140,6 +141,8 @@ const StyledOrderPriceTitle = styled.span`
     vertical-align:top;
 `;
 const StyledOrderPriceInfo = styled.span`
+    display:flex;
+    align-content:flex-end;
     text-align:end;
     width:50%;
     display:inline-block;
@@ -262,7 +265,7 @@ const Order = () => {
     const [termOpen, setTermOpen] = useState(false);
 
     const [point, setPoint] = useState(''); 
-    const [vpointAble, setVpointAble] = useState(''); 
+    const [vpointAble, setVpointAble] = useState(0); 
     const [vpoint, setVpoint] = useState(''); 
     const [vid, setVid] = useState(''); 
 
@@ -296,7 +299,7 @@ const Order = () => {
             if(vnotiId){
                 setVid(vnotiId);
                 const pointData = await vnotiCall.get(`/point/${vnotiId}`);
-                if(pointData.data.result = "000") setVpointAble(pointData.data.data.mb_point);                 
+                if(pointData.data.result == "000") setVpointAble(pointData.data.data.mb_point);                 
             }
 
             //address
@@ -366,6 +369,10 @@ const Order = () => {
             }
         }
 
+        //minumum point Chk
+        const minPoint = base.minPoint || base.default.minPoint;
+        if((point || vpoint) && (point + vpoint < minPoint)) return setOrderAlert('MinpointNotUsed');
+
         //<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<< init >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
         if(defaultDelivery == 'empty' || defaultDelivery == 'blank') return setOrderAlert('isNotAddress');
         if(!paymentType) return setOrderAlert('isNotPayment');
@@ -402,6 +409,7 @@ const Order = () => {
 
         //<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<< make pay >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
         if(paymentType == 'credit'){ //card&credit
+            setLoading(true);
             const clientKey = process.env.REACT_APP_TOSS_CLIENT;
             const isParticipate = order.set.join ? 'y' : 'n';
 
@@ -423,6 +431,7 @@ const Order = () => {
             loadTossPayments(clientKey).then(tossPayments => {
                 tossPayments.requestPayment(`카드`, orderObject);
             });
+            setLoading(false);
             return;
         }
 
@@ -660,8 +669,12 @@ const Order = () => {
         const minPoint = base.minPoint || base.default.minPoint;
         const maxPoint = base.maxPoint || base.default.maxPoint;
         const goodsTotal = (order.set.goods.goodsPrice + order.set.option.addPrice);
-        const realMax = Math.min(self.point, maxPoint, (count * (deliveryFee + goodsTotal))/10-vpoint);
-        const realMaxV = Math.min(vpointAble, maxPoint, (count * (deliveryFee + goodsTotal))/10-point);
+        //const realMax = Math.min(self.point, maxPoint, (count * (deliveryFee + goodsTotal))/10-vpoint);
+        //const realMaxV = Math.min(vpointAble, maxPoint, (count * (deliveryFee + goodsTotal))/10-point);
+        const realMax = Math.min(self.point, (count * (deliveryFee + goodsTotal)) * maxPoint/100 - vpoint);
+        const realMaxV = Math.min(vpointAble, (count * (deliveryFee + goodsTotal)) * maxPoint/100 - point);        
+
+        const pointAbleChk = (self.point+vpointAble >= minPoint);
 
         return(
             <>
@@ -676,26 +689,27 @@ const Order = () => {
                     <StyledOrderPriceTitle>배송비</StyledOrderPriceTitle>
                     <StyledOrderPriceInfo>{deliveryFee}원</StyledOrderPriceInfo>
                 </StyledOrderDelivery>
-
-                {//2023-03-16 포인트 테스트 (수정예정)
-                <StyledOrderPoint pointYn={base.pointYn=='y' && self.point >= minPoint}>
-                    <StyledOrderPriceTitle>포인트 <QuestionIcon content={<PointInfo/>}/></StyledOrderPriceTitle>
-                    <StyledOrderPriceInfo>
-                        <span style={{fontSize:'0.8em',fontWeight:'normal'}}>사용가능 {self.point.toLocaleString()}원</span>
-                        <PriceInput changeHandler={setPoint} max={realMax}/>원
-                    </StyledOrderPriceInfo>
-                </StyledOrderPoint>                
+                {
+                    base.pointYn=='y' ? ( // the shop should use point option
+                    <>
+                        <StyledOrderPoint pointYn={ pointAbleChk } style={{'display':'none'}}>
+                            <StyledOrderPriceTitle>포인트 <QuestionIcon content={<PointInfo/>}/></StyledOrderPriceTitle>
+                            <StyledOrderPriceInfo>
+                                <span style={{fontSize:'0.9em',fontWeight:'normal'}}>{pointAbleChk ? <>사용가능</>:null} {self.point.toLocaleString()}원</span>
+                                {pointAbleChk ? <><PriceInput changeHandler={setPoint} max={realMax}/>원</> : null} 
+                            </StyledOrderPriceInfo>
+                        </StyledOrderPoint>                
+                        <StyledOrderPoint pointYn={ pointAbleChk }>
+                            <StyledOrderPriceTitle>Vnoti 포인트 <QuestionIcon content={<PointInfo/>}/></StyledOrderPriceTitle>
+                            <StyledOrderPriceInfo>
+                                <span style={{fontSize:'0.9em',fontWeight:'normal'}}>{pointAbleChk ? <>사용가능</>:null} {vpointAble.toLocaleString()}원</span>
+                                {pointAbleChk ?<><PriceInput changeHandler={setVpoint} max={realMaxV}/>원</> : null}
+                            </StyledOrderPriceInfo>
+                        </StyledOrderPoint>        
+                    </>
+                    ) : null                    
                 }
-                {//vnoti point
-                <StyledOrderPoint pointYn={base.pointYn=='y' && vpointAble >= minPoint}>
-                    <StyledOrderPriceTitle>Vnoti 포인트 </StyledOrderPriceTitle>
-                    <StyledOrderPriceInfo>
-                        <span style={{fontSize:'0.8em',fontWeight:'normal'}}>사용가능 {vpointAble.toLocaleString()}원</span>
-                        <PriceInput changeHandler={setVpoint} max={realMaxV}/>원
-                    </StyledOrderPriceInfo>
-                </StyledOrderPoint>                
-                }                
-
+        
                 <StyledOrderTotal>
                     <StyledOrderPriceTitle>상품 결제 금액</StyledOrderPriceTitle>
                     <StyledOrderPriceInfo>{priceForm(count * (deliveryFee + goodsTotal) - point - vpoint)}</StyledOrderPriceInfo>

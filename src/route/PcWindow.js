@@ -1,9 +1,10 @@
 //------------------------------ MODULE -------------------------------------
 import styled from "styled-components";
 import { CustomLoading } from "component";
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import webBackground from 'data/img/webBackground3.jpg';
-import { loadTossPayments } from '@tosspayments/payment-sdk'
+import { loadTossPayments } from '@tosspayments/payment-sdk';
+import { BaseContext } from "context";
 
 //------------------------------ CSS ----------------------------------------
 const StyledContainer = styled.div`
@@ -44,6 +45,9 @@ const StyledFooterBusinessInfo = styled.div`
 const PcWindow = () => {
     console.log(window.location.href);
     console.log(window.location.pathname);
+    //context
+    const { base } = useContext(BaseContext);
+    
     //state
     const [loading, setLoading] = useState(true);
 
@@ -103,12 +107,12 @@ const PcWindow = () => {
             </StyledWindow>
             <StyledFooterBusinessInfo>
                 <br />                
-                법인명 : 엠더블유홀딩스(주) /
-                대표자 : 허인정 /
-                사업자 등록번호 : 777-86-00685 /
-                통신판매업 신고번호 : 제2021-서울송파-0744호 <br/>
-                주소 : 서울특별시 송파구 양재대로71길 2-11 (올림픽아트빌) /
-                이메일 : mwo@mwd.kr <br/>
+                법인명 : {base.companyName} /
+                대표자 : {base.companyOwner} /
+                사업자 등록번호 : {base.saupjaNo} /
+                통신판매업 신고번호 : {base.tolsinNo} <br/>
+                주소 : {base.companyAddr} /
+                이메일 : {base.companyEmail} <br/>
                 Copyright©alldeal Corp.All right reserved.
                 <br />                
             </StyledFooterBusinessInfo>                        

@@ -49,21 +49,29 @@ const PointInfo = () => {
         <StyledPointInfo>
             <StyledTitle>포인트 사용 안내</StyledTitle>
             <StyledContent>
+                {
+                    /* 
                 <StyledContentList>
                     <StyledContentTitle><TbCircleNumber1/></StyledContentTitle>
                     <StyledContentDesc>사용 가능 포인트 <StyledContentBold>{minPoint.toLocaleString()}</StyledContentBold> 포인트 이상일 때 현금처럼 사용 가능합니다.</StyledContentDesc>
+                </StyledContentList>                    
+                    */
+                }
+                <StyledContentList>
+                    <StyledContentTitle><TbCircleNumber1/></StyledContentTitle>
+                    <StyledContentDesc>구매 1회에 한하여 최종결제금액의 <StyledContentBold>{maxPoint}%</StyledContentBold> 까지 사용 가능하며, 가용포인트 합계 최소 <StyledContentBold>{minPoint.toLocaleString()}</StyledContentBold> 포인트부터 사용 가능합니다.</StyledContentDesc>
                 </StyledContentList>
+                {
+                /*
                 <StyledContentList>
                     <StyledContentTitle><TbCircleNumber2/></StyledContentTitle>
-                    <StyledContentDesc>구매 1회에 한하여 최종결제금액의 <StyledContentBold>10%</StyledContentBold> 까지 사용 가능하며, 최대 <StyledContentBold>{maxPoint.toLocaleString()}</StyledContentBold> 포인트를 초과하여 사용할 수 없습니다.</StyledContentDesc>
-                </StyledContentList>
-                <StyledContentList>
-                    <StyledContentTitle><TbCircleNumber3/></StyledContentTitle>
                     <StyledContentDesc>포인트 유효기간은 적립일로부터 <StyledContentBold>180일</StyledContentBold> 까지이며, 
                     알림설정이 되어 있을 경우 만료 <StyledContentBold>30일</StyledContentBold> 전 설정에따라 1회에 한하여 안내 됩니다.</StyledContentDesc>
                 </StyledContentList>
+                */
+                }
                 <StyledContentList>
-                    <StyledContentTitle><TbCircleNumber4/></StyledContentTitle>
+                    <StyledContentTitle><TbCircleNumber2/></StyledContentTitle>
                     <StyledContentDesc>포인트 적립 상품 구매결제 시 포인트를 사용할 경우, 포인트 사용 금액을 제외한 지불 금액에 대해 포인트가 적립됩니다.</StyledContentDesc>
                 </StyledContentList>                                                
             </StyledContent>

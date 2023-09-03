@@ -101,7 +101,9 @@ const App = () => {
         {(!isMobile && window.self == window.top)
             ? 
                 ( //PC AND NOT IFRAME
-                    <PcWindow />
+                    <BaseContextProvider init = {base}>
+                        <PcWindow />
+                    </BaseContextProvider>
                 )
             : 
                 ( //MOBILE OR IFRAME

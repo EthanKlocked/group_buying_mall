@@ -29,6 +29,8 @@ const msgData = {
     isNotAddress : "배송지 정보가 존재하지 않습니다.",
     isNotPayment : "결제수단 정보가 존재하지 않습니다.",
 
+    MinpointNotUsed : "최소 포인트사용 금액 요건을 충족하지 못했습니다.",
+
     informal : "올바르지 못한 형식입니다.",    
     differCertNum : "잘못된 번호입니다. 다시 확인 해 주세요.",        
     timeExpired : "인증 시간이 만료되었습니다.",
@@ -76,6 +78,8 @@ const msgData = {
     orderFail : "주문 및 결제가 취소되었습니다.",
     reviewDeleteConfirm : "정말 이 후기를 삭제하시겠습니까?",
     error : "오류가 발생하였습니다.",
+
+    onlySongpa : "현재는 서울시 송파구 내 주소지만 배송지 등록이 가능합니다.",
 }     
 
 export default msgData;
