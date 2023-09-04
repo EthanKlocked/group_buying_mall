@@ -410,7 +410,8 @@ const Order = () => {
         //<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<< make pay >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
         if(paymentType == 'credit'){ //card&credit
             setLoading(true);
-            const clientKey = process.env.REACT_APP_TOSS_CLIENT;
+            //const clientKey = process.env.REACT_APP_TOSS_CLIENT;
+            const clientKey = base.pgClientKey;
             const isParticipate = order.set.join ? 'y' : 'n';
 
             const orderObject = {
@@ -424,15 +425,15 @@ const Order = () => {
 
             //toss sdk open [iframe]
             if(window.self != window.top){
-                return window.parent.postMessage({type:"toss", clientKey:clientKey, orderObject:orderObject}, `${process.env.REACT_APP_HOST}`);
+                window.parent.postMessage({type:"toss", clientKey:clientKey, orderObject:orderObject}, `${process.env.REACT_APP_HOST}`);
+                return setLoading(false);
             }
 
             //toss sdk open [normal]
             loadTossPayments(clientKey).then(tossPayments => {
                 tossPayments.requestPayment(`카드`, orderObject);
             });
-            setLoading(false);
-            return;
+            return setLoading(false);;
         }
 
         //simple pay

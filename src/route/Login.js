@@ -105,7 +105,7 @@ const Login = React.memo(() => {
     const navigate = useNavigate();
     const SearchParams = new URLSearchParams(useLocation().search);
     const appleError = SearchParams.get('applelogin');    
-
+    
     //state
     const [loginAlert, setLoginAlert] = useState(false);
     const [iframeAlert, setIframeAlert] = useState(false);
@@ -136,6 +136,8 @@ const Login = React.memo(() => {
     useEffect(() => {
         //kakao sdk init
         if(isMobile && Kakao && !Kakao.isInitialized()) Kakao.init(`${process.env.REACT_APP_KAKAO_J_KEY}`);
+
+        //apple login error alert
         if(appleError && appleError == "error") setLoginAlert('appleAuthErr');
     }, []);
 

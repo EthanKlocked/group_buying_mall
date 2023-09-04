@@ -610,8 +610,9 @@ const Description = React.memo(({id, closeEvent}) => {
 
     const disableButton = (id) => document.getElementById(id).style.background = "#ccc";
 
-    const sendShare = (joinId = null) => {
+    const sendShare = async(joinId = null) => {
         if(!data) return;
+
         //set
         const sendObj = {
             objectType: 'commerce',
@@ -837,19 +838,9 @@ const Description = React.memo(({id, closeEvent}) => {
                             </StyledBuyImgBox>
                             <StyledBuyText>{`${joinTarget.member[0].name.substr(0, 2)}* 님의 팀구매 참여하기 (${joinTarget.team.teamCnt}/${joinTarget.team.teamMax}명)`}</StyledBuyText>
                             <StyledBuyTime><AutoTimer expireEvent = {() => disableButton(`teamJoinButton`)} timeSet = {joinTarget.team.teamTimeLimit} type="h"/> 남음</StyledBuyTime>
-                            
                         </StyledBuyJoinButton> 
                         :
                         <>
-                        {/* 
-                        <StyledButton onClick={() => setDescAlert('noFunction')}>
-                            {priceForm(1.5*data.goods.goodsPrice)}<br/>
-                            혼자 구매하기
-                        </StyledButton>
-                        */}
-                        {/*
-                        <div style={{fontWeight:'bold', fontSize:'0.9em', lineHeight:'3.3em'}}>팀을 모집 해 보세요!</div>
-                        */}
                         <span 
                             style={{
                                 margin:"3% 7%",

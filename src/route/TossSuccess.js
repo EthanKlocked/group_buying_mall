@@ -1,8 +1,8 @@
 //------------------------------ MODULE -------------------------------------
 import { useState, useEffect, useMemo} from "react";
-import { useLocation, useSearchParams, useNavigate } from "react-router-dom";
+import { useSearchParams, useNavigate } from "react-router-dom";
 import { Modal, CustomLoading } from "component";
-import { apiCall, vnotiCall } from "lib";
+import { apiCall } from "lib";
 import { msgData } from "static";
 
 //------------------------------ CSS ----------------------------------------
@@ -18,13 +18,9 @@ const TossSuccess = () => {
     const amount = searchParams.get('amount');
     const joinChk = searchParams.get('joinChk');
     const optionId = searchParams.get('optionId');
-    const vid = searchParams.get('vid');
-    const apoint = searchParams.get('apoint');
-    const vpoint = searchParams.get('vpoint');
 
     //state
     const [loading, setLoading] = useState(false);
-    const [error, setError] = useState(null);
     const [result, setResult] = useState(null);
     const [orderConfirm, setOrderConfirm] = useState(false);
     const [orderAlert, setOrderAlert] = useState(false);
@@ -80,49 +76,6 @@ const TossSuccess = () => {
             const token = localStorage.getItem("token");
             const payResult = await apiCall.get("/billing/card/certificate", {params});    
             if(payResult.data == 'success'){
-                /*********** POINT CHECK **********/
-                /*
-                //POINT CONTROLL
-                let alldealPointChk = 'try';
-                let vnotiPointChk = 'try';
-
-                //alldeal point try
-                if(Number(apoint) > 0){
-                    params = { 'amount' : -Number(apoint) };
-                    const aPointUse = await apiCall.get("/member/any/point", {params});
-                    alldealPointChk = (aPointUse.data == "success") ? 'ok' : 'fail';
-                }
-
-                //vnoti point try
-                if(vid && Number(vpoint) > 0){
-                    const vPointUse = await vnotiCall.get(`/point/${vid}/order?od_id=${orderId}&use_point=${vpoint}`);
-                    vnotiPointChk = (vPointUse.data.result == "000") ? 'ok' : 'fail';
-                }
-
-                //point failed
-                if(alldealPointChk =='fail' || vnotiPointChk == 'fail'){
-                    //order status reset process
-                    params = { 
-                        'orderNum' : orderId,
-                        'orderStatus' : '1', // 2 -> 1
-                        'teamId' : 'reset',
-                    }
-                    const orderUpdateResult = await apiCall.put("/order", {params}, {headers}); //orderCancel
-
-                    //payback
-                    params.reason = '포인트 사용 오류';
-                    const cancelResult = await apiCall.get("/billing/payback/cancel", {params}); //billingCancel
-
-                    if(alldealPointChk == 'ok'){ //case alldeal used vnoti failed
-                        params = { 'amount' : Number(apoint) };
-                        const aPointCancel = await apiCall.get("/member/any/point", {params});
-                    }
-
-                    if(vnotiPointChk == 'ok'){ //case alldeal failed vnoti used
-                        const vPointCancel = await vnotiCall.get(`/point/${vid}/cancel?od_id=${orderId}`);
-                    }
-                }else{
-                */
                     /*********** TEAM CHECK ***********/
                     params = { teamId : teamId };
                     const teamUpdateResult = await apiCall.put("/team", {params}, {headers}); //case 1 : ready -> set, case2 : set -> go(order state to 3)
@@ -137,22 +90,10 @@ const TossSuccess = () => {
 
                         //payback
                         params.reason = '팀 생성 오류';
-                        const cancelResult = await apiCall.get("/billing/payback/cancel", {params}); //billingCancel
-
-                        /*
-                        if(alldealPointChk == 'ok'){ //case alldeal used vnoti failed
-                            params = { 'amount' : Number(apoint) };
-                            const aPointCancel = await apiCall.get("/member/any/point", {params});
-                        }
-    
-                        if(vnotiPointChk == 'ok'){ //case alldeal failed vnoti used
-                            const vPointCancel = await vnotiCall.get(`/point/${vid}/cancel?od_id=${orderId}`);
-                        } 
-                        */                       
+                        const cancelResult = await apiCall.get("/billing/payback/cancel", {params}); //billingCancel          
                     }else{
                         payChk = 'success'; //case perfect
                     }
-                //}
             }else{
                 //order status 0
                 params = { 
@@ -161,17 +102,6 @@ const TossSuccess = () => {
                     'teamId' : 'reset',
                 }
                 const orderUpdateResult = await apiCall.put("/order", {params}, {headers}); //orderCancel
-                
-                /*
-                if(payResult.data != 'networkErr'){ //order update failed => payback
-                    //payback
-                    params = { 
-                        'orderNum' : orderId,
-                        'reason' : '결제 오류',
-                    }
-                    const cancelResult = await apiCall.get("/billing/payback/cancel", {params});
-                }
-                */
             } 
         }catch(e){
             console.log(e);
