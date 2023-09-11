@@ -46,7 +46,6 @@ const GoodsQaList = ({goodsId, limit}) => {
         try {
             const params = {
                 goodsId : goodsId, 
-                //answerYn : 'y',
                 rpp : limit,
                 page : page,
             }

@@ -30,7 +30,6 @@ const StyledPageMark = styled.div`
     align-content:center;
 `;
 
-
 //------------------------------ COMPONENT ----------------------------------
 const Slide = React.memo(({imgBox, options}) => {
     //state

@@ -6,46 +6,6 @@ import { Logo, SearchBar, Menu, SimpleMotion } from "component";
 import { SrchContextProvider, CacheContext} from "context";
 import { touchSlide } from "lib";
 
-//------------------------------ CSS ----------------------------------------
-const StyledContainer = styled.div`
-    display:grid;
-    height: 100%;
-    //grid-template-rows: ${(props)=>props.chkSearch ? '4em' : '6em'} auto;
-    overflow:hidden;
-`;
-const StyledHeader = styled.div`
-    display:grid;
-    width:100%;
-    //grid-template-rows: ${(props)=>props.chkSearch ? '3em ' : '3em auto'};
-    height:${(props)=>props.chkSearch ? '3.5em ' : '7em'};
-    position:fixed;
-    z-index:3;
-    background:white;
-`;
-const StyledSearchBar = styled.div`
-    display:grid;
-    padding: 0 0.7em;
-    height:3.5em;
-    grid-template-columns: 1fr 3fr;
-    align-content: center;
-`;
-const StyledContent = styled.div`
-    width:100%;
-    margin: 0 auto;
-    left: 0;
-    right: 0;
-    margin-top:${(props)=>props.chkSearch ? '3.5em' : '7em'};
-    overflow-y:auto;
-    overflow-x:hidden;
-    &::-webkit-scrollbar {
-        display: none;
-    }
-`;
-const StyledFooter = styled.div`
-    display:grid;
-    height:5em;
-`;
-
 //------------------------------ COMPONENT ----------------------------------
 const Home = React.memo(() => {
     //init
@@ -88,3 +48,43 @@ const Home = React.memo(() => {
 });
 
 export default Home;
+
+//------------------------------ CSS ----------------------------------------
+const StyledContainer = styled.div`
+    display:grid;
+    height: 100%;
+    //grid-template-rows: ${(props)=>props.chkSearch ? '4em' : '6em'} auto;
+    overflow:hidden;
+`;
+const StyledHeader = styled.div`
+    display:grid;
+    width:100%;
+    //grid-template-rows: ${(props)=>props.chkSearch ? '3em ' : '3em auto'};
+    height:${(props)=>props.chkSearch ? '3.5em ' : '7em'};
+    position:fixed;
+    z-index:3;
+    background:white;
+`;
+const StyledSearchBar = styled.div`
+    display:grid;
+    padding: 0 0.7em;
+    height:3.5em;
+    grid-template-columns: 1fr 3fr;
+    align-content: center;
+`;
+const StyledContent = styled.div`
+    width:100%;
+    margin: 0 auto;
+    left: 0;
+    right: 0;
+    margin-top:${(props)=>props.chkSearch ? '3.5em' : '7em'};
+    overflow-y:auto;
+    overflow-x:hidden;
+    &::-webkit-scrollbar {
+        display: none;
+    }
+`;
+const StyledFooter = styled.div`
+    display:grid;
+    height:5em;
+`;

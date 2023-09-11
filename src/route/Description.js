@@ -12,468 +12,6 @@ import descriptionLoading from 'data/img/descriptionLoading.png';
 import linkIcon from 'data/img/linkIcon.png';
 import ReactGA4 from 'react-ga4';
 
-//------------------------------ CSS ----------------------------------------
-const StyledDescription = styled.div`
-    width:100%;
-    height:100%;
-    overflow-y:auto;
-    &::-webkit-scrollbar {
-        display: none;
-    }
-    img{
-        width:100%;
-    }
-`;
-const StyledHeader = styled.div`
-    display:grid;
-    z-index: 2;
-    position: fixed;
-    width:100%;
-    grid-template-columns: auto auto;
-`;
-const StyledBack = styled(IoIosArrowBack)`
-    border-radius:50%;
-    padding:2%;
-    background:white;
-    margin:0.8em;
-    color:#aaa;
-    cursor:pointer;
-`;
-const StyledContainer = styled.div`
-    background:white;
-    height:100%;
-`;
-const StyledBanner = styled.div`
-    display:grid;
-    width:100%;
-`;
-const StyledBannerLoading = styled.div`
-    background:white;
-    width:100%;
-    padding-bottom:101%;
-
-    background-repeat: no-repeat;
-
-    background-image:
-        linear-gradient( 90deg, rgba(255, 255, 255, 0) 30%, rgba(255, 255, 255, 0.5) 60%, rgba(255, 255, 255, 0) 90% ), /* animation */
-        linear-gradient( #eee 100%, transparent 0 );
-
-    background-size:
-        50% 100%,
-        100% 100%;
-
-    background-position:
-        -50% 0,
-        0 0;
-
-    animation: shineM 1s infinite;
-
-    @keyframes shineM {
-        to {
-            background-position: 
-                150% 0,
-                0 0;
-        }
-    }    
-`;
-const StyledInfo = styled.div`
-    display:grid;
-    grid-template-columns: 1fr 1fr 1fr;
-    justify-items:start;
-    padding:0 5%;
-    margin-top:3%;
-    border-bottom:solid 10px #eee;
-`;
-const StyledPercent = styled.div`
-    display:grid;
-    font-size:0.8em;
-    font-weight:bold;
-`;
-const StyledTagPrice = styled.div`
-    display:grid;
-    font-size:0.8em;
-    color:#aaa;
-    text-decoration:line-through;
-    grid-column: 2 / span 3;
-`;
-const StyledPrice = styled.div`
-    display:grid;
-    color:crimson;
-    grid-column: 1 / span 4;
-`;
-const StyledName = styled.div`
-    display:grid;
-    text-align:left;
-    grid-column: 1 / span 4;
-    justify-content:start;
-    padding: 2% 0;
-    width:100%;
-    border-bottom:solid 1px #aaa;
-`;
-const StyledDelivery1 = styled.div`
-    display:grid;
-    font-size:0.8em;
-    grid-column: 1 / span 4;
-    justify-content:start;
-    padding: 2% 2%;
-    width:96%;
-    border-bottom:solid 1px #aaa;
-`;
-const StyledDelivery2 = styled.div`
-    display:grid;
-    padding: 2% 2%;
-    font-size:0.8em;
-    grid-column: 1 / span 4;    
-`;
-const StyledTeamInfo = styled.div`
-    display:grid;
-    grid-column: 1 / span 4;
-    color:red;
-    font-size:0.9em;
-    font-weight:550;
-    grid-template-columns: auto 1fr;
-    align-items:center;
-    justify-items:start;
-    padding: 3% 2%;
-    width:96%;
-    cursor:pointer;
-`;
-const StyledPartyList = styled.div`
-    width:90%;
-    border-top: solid 0.1em #eee;
-    margin:auto;
-    height:3.7em;
-    position:relative;
-    span{
-        display:inline-block;
-        vertical-align:middle;
-    }
-`;
-const StyledPartyListImg = styled.span`
-    position:absolute;
-    left:${(props) => props.seq * 1.2}em;
-    top:0.5em;
-    display:inline-block;
-    overflow:hidden;
-    width:2.5em;
-    height:2.5em;
-    border-radius:50%;
-    border:solid 0.1em white;
-    img{
-        width:100%;
-        height:100%;
-        object-fit: cover;        
-    }
-`;
-const StyledPartyListName = styled.span`
-    position:absolute;
-    line-height:4.5em;
-    left:7.5em;
-    font-size:0.8em;
-`;
-const StyledPartyListInfo = styled.span`
-    display:inline-block;
-    position:absolute;
-    width:5.5em;
-    right:7em;
-    font-size:0.8em;
-    top:0.8em;
-    .partyCnt{
-        color:crimson;
-        padding-right:0.5em;
-    }
-    #autoTimer span{
-        color:#aaa;
-        font-weight:500;
-    }
-    .autoTimerM{
-        padding-left:0.2em;
-    }
-    .autoTimerS{
-        padding-left:0.2em;
-    }
-`;
-const StyledPartyFinished = styled.span`
-    position:absolute;
-    color:#ccc;
-    line-height:3.5em;
-    right:0;
-`;
-const StyledPartyListButton = styled.span`
-    background:green;
-    position:absolute;
-    right:0;
-    top:1.1em;
-    width:6em;
-    line-height:2.5em;
-    background:crimson;
-    color:white;
-    border-radius:5px;
-    font-size:0.8em;
-    cursor:pointer;
-`;
-const StyledTeam = styled.div`
-    display:grid;
-    border-bottom:solid 10px #eee;
-`;
-const StyledReview = styled.div`
-    border-bottom:solid 10px #eee;
-`;
-const StyledParty = styled.div`
-    display:grid;
-    border-bottom:solid 10px #eee;
-`;
-const StyledSeller = styled.div`
-    display:grid;
-    border-bottom:solid 10px #eee;
-`;
-const StyledSectionTitle = styled.div`
-    text-align:left;
-    font-size:0.9em;
-    font-weight:550;
-    padding:5%;
-    padding-bottom:2%;
-`;
-const StyledSectionContent = styled.div`
-    padding: 2% 5%;
-`;
-
-const StyledDetail = styled.div`
-    width:100%;
-`;
-const StyledDetailContainer = styled.div`
-    height:40em;
-    overflow-y:hidden;
-    position:relative;
-`;
-const StyledNoneHtml = styled.div`
-    display:grid;
-    width:100%;
-    font-size:0.8em;
-    color:#aaa;
-    height:10em;
-    align-content:center;
-    border-bottom:solid 1px #ddd;
-`;
-const StyledHtml = styled.div`
-    width:100%;
-`;
-const StyledDetailLinkBox = styled.div`
-    display:grid;
-    background-color: rgba(255, 255, 255, 0.5);
-    position:absolute;
-    bottom:0em;
-    height:3.5em;
-    width:100%;
-`;
-const StyledDetailLink = styled.div`
-    display:grid;
-    align-items:center;
-    background:white;
-    color:crimson;
-    font-size:0.8em;
-    border:solid 1px crimson;
-    margin:2%;
-    border-radius:5px;
-    cursor:pointer;
-`;
-const StyledLink = styled.div`
-    display:grid;
-    text-align:left;
-    padding:3% 5%;
-    grid-template-columns:95% 5%;
-    font-weight:550;
-    font-size:0.9em;
-    align-items:center;
-    border-bottom:solid 1px #ddd;
-    cursor:pointer;
-`;
-const StyledEmpty = styled.div`
-    display:grid;
-    height:3.5em;
-`;
-const StyledButton = styled.div`
-    display:grid;
-    border-radius:8px;
-    color:white;
-    font-size:0.8em;
-    background: crimson;
-    margin:3% 7%;
-    justify-content:center;
-    align-content:center;
-    cursor:pointer;
-`;
-const StyledBuy = styled.div`
-    display:grid;
-    grid-template-columns:${(props) => props.joinState ? '3% 95%' : '10% 40% 40%' };
-    width:100%;
-    height:3em;
-    bottom:0;
-    position:fixed;
-    background:white;
-    border-top:solid 1px #aaa;
-    justify-content:center;
-    padding:1%;
-`;
-const StyledBuyJoinButton = styled.div`
-    position:relative;
-    border-radius:8px;
-    color:white;
-    font-size:0.8em;
-    background: ${(props) => props.joinExp ? "#ccc" : "crimson"};
-    margin:1% 7%;
-    cursor:pointer;
-`;
-const StyledBuyImgBox = styled.span`
-    display:inline-block;
-    position:absolute;
-    left:1em;
-    top:0.6em;
-    width:2em !important;
-    height:2em !important;
-    border-radius:50%;
-    overflow:hidden;
-`;
-const StyledBuyImg = styled.img`
-    width:100%;
-    height:100%;
-    border-radius:50%;
-    object-fit: cover;  
-`;
-const StyledBuyText = styled.span`
-    position:absolute;
-    left:4.5em;
-    top:0.3em;
-    font-size:1em;
-    font-weight:500;
-`;
-const StyledBuyTime = styled.span`
-    position:absolute;
-    left:4.5em;
-    top:1.5em;
-    font-size:1em;
-    font-weight:500;
-`;
-const StyledWish = styled.div`
-    display:grid;
-    align-content:center;
-    svg{
-        color:crimson;
-        font-size:2em;
-        cursor:pointer;
-    }
-`;
-const StyledMaxQty = styled.span`
-    font-size:0.8em;
-    font-weight:bold;
-    color:#0F9D58;
-    margin-left:1.5em;
-`;
-const StyledOption = styled.div`
-    display:grid;
-`;
-const StyledOptionPrice = styled.div`
-    font-weight:bold;
-    color:crimson;
-    text-align:start;
-    font-size:1.3em;
-`;
-const StyledOptionContent = styled.div`
-    display:grid;
-    width:100%;
-    align-content:center;
-    border-bottom:1px solid #ccc;
-    padding:0.5em 0;
-`;
-const StyledOptionTitle = styled.div`
-    text-align:start;
-    font-size:1.05;
-`;
-const StyledOptionSubtitle = styled.span`
-    text-align:start;
-    font-size:0.8em;
-    color:crimson;
-    margin-left:1em;
-    margin-bottom:0.3em;
-    display: ${(props) => props.optChk=="isNot" ? "inline" : "none"};
-`;
-const StyledOptionList = styled.div`
-    text-align:start;
-    word-break:break-all;
-    overflow:auto;
-    height:7em;
-    display:block;
-`;
-const StyledOptionEach = styled.span`
-    display:block;
-    padding:0.5em 1.5em;
-    line-height:1.4em;
-    font-size:1em;
-    margin:0.8em 0;
-    border-radius:0.5em;
-    cursor:pointer;
-    ${(props) => 
-        props.selected ? 
-        `
-            background: crimson;
-            color:white;    
-        ` : 
-        (
-            props.qtyCheck ? 
-            `
-            background: #eee;
-            color:black;        
-            ` 
-            : 
-            `
-            background: #eee;
-            color:#bbb;        
-            ` 
-        )
-    }
-`;
-const StyledOptionCount = styled.div`
-    display:grid;
-    grid-template-columns:5fr 3fr;
-    width:100%;
-    justify-items:start;
-    align-items:center;
-    line-height:2em;  
-`;
-const StyledOptionCountBtn = styled.span`
-    margin: 0 0.5em;
-    color:#555;
-    font-size:1.3em;
-    cursor:pointer;
-    svg{
-        vertical-align:middle;
-    }
-`;
-const StyledOptionCountNumber = styled.span`
-    display:inline-block;
-    width:1em;
-    font-size:1.2em;
-`;
-const StyledReviewLinkBox = styled.div`
-    display:grid;
-    background-color: rgba(255, 255, 255, 0.5);
-    height:3.5em;
-    width:100%;
-`;
-const StyledReviewLink = styled.span`
-    background:white;
-    color:crimson;
-    font-size:0.8em;
-    border:solid 1px crimson;
-    margin:2%;
-    border-radius:5px;
-    line-height:3em;
-    svg{
-        font-size:1.5em;
-        vertical-align:middle;
-    }
-`;
-
 //------------------------------ COMPONENT ----------------------------------
 const Description = React.memo(({id, closeEvent}) => {
     //context
@@ -559,7 +97,6 @@ const Description = React.memo(({id, closeEvent}) => {
         navigate(-1);
     }
     const optionWindowOpen = (j=null) => {
-        //if(window.self != window.top/*IFRAME CHK*/) return setIframeAlert({desc:"상품은 모바일 기기를 통해 alldeal.kr로 접속하신 뒤 구매하실 수 있습니다.", title:"모바일을 통해 접속 해 주세요!"});        
         if(j && strToDate(j.team.teamTime)<new Date()) return setDescAlert('teamExpired');
         setJoinInfo(j);
         setOptionWindow(true);
@@ -1128,7 +665,6 @@ const Description = React.memo(({id, closeEvent}) => {
     return (
         <SimpleMotion>
         <StyledDescription id="descriptionTouch">
-            {/*shareGear*/}
             <StyledHeader id="webDescHeader">
                 <StyledBack size='2em' onClick={moveBack}/>
             </StyledHeader>
@@ -1155,3 +691,465 @@ const Description = React.memo(({id, closeEvent}) => {
 });
 
 export default Description;
+
+//------------------------------ CSS ----------------------------------------
+const StyledDescription = styled.div`
+    width:100%;
+    height:100%;
+    overflow-y:auto;
+    &::-webkit-scrollbar {
+        display: none;
+    }
+    img{
+        width:100%;
+    }
+`;
+const StyledHeader = styled.div`
+    display:grid;
+    z-index: 2;
+    position: fixed;
+    width:100%;
+    grid-template-columns: auto auto;
+`;
+const StyledBack = styled(IoIosArrowBack)`
+    border-radius:50%;
+    padding:2%;
+    background:white;
+    margin:0.8em;
+    color:#aaa;
+    cursor:pointer;
+`;
+const StyledContainer = styled.div`
+    background:white;
+    height:100%;
+`;
+const StyledBanner = styled.div`
+    display:grid;
+    width:100%;
+`;
+const StyledBannerLoading = styled.div`
+    background:white;
+    width:100%;
+    padding-bottom:101%;
+
+    background-repeat: no-repeat;
+
+    background-image:
+        linear-gradient( 90deg, rgba(255, 255, 255, 0) 30%, rgba(255, 255, 255, 0.5) 60%, rgba(255, 255, 255, 0) 90% ), /* animation */
+        linear-gradient( #eee 100%, transparent 0 );
+
+    background-size:
+        50% 100%,
+        100% 100%;
+
+    background-position:
+        -50% 0,
+        0 0;
+
+    animation: shineM 1s infinite;
+
+    @keyframes shineM {
+        to {
+            background-position: 
+                150% 0,
+                0 0;
+        }
+    }    
+`;
+const StyledInfo = styled.div`
+    display:grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    justify-items:start;
+    padding:0 5%;
+    margin-top:3%;
+    border-bottom:solid 10px #eee;
+`;
+const StyledPercent = styled.div`
+    display:grid;
+    font-size:0.8em;
+    font-weight:bold;
+`;
+const StyledTagPrice = styled.div`
+    display:grid;
+    font-size:0.8em;
+    color:#aaa;
+    text-decoration:line-through;
+    grid-column: 2 / span 3;
+`;
+const StyledPrice = styled.div`
+    display:grid;
+    color:crimson;
+    grid-column: 1 / span 4;
+`;
+const StyledName = styled.div`
+    display:grid;
+    text-align:left;
+    grid-column: 1 / span 4;
+    justify-content:start;
+    padding: 2% 0;
+    width:100%;
+    border-bottom:solid 1px #aaa;
+`;
+const StyledDelivery1 = styled.div`
+    display:grid;
+    font-size:0.8em;
+    grid-column: 1 / span 4;
+    justify-content:start;
+    padding: 2% 2%;
+    width:96%;
+    border-bottom:solid 1px #aaa;
+`;
+const StyledDelivery2 = styled.div`
+    display:grid;
+    padding: 2% 2%;
+    font-size:0.8em;
+    grid-column: 1 / span 4;    
+`;
+const StyledTeamInfo = styled.div`
+    display:grid;
+    grid-column: 1 / span 4;
+    color:red;
+    font-size:0.9em;
+    font-weight:550;
+    grid-template-columns: auto 1fr;
+    align-items:center;
+    justify-items:start;
+    padding: 3% 2%;
+    width:96%;
+    cursor:pointer;
+`;
+const StyledPartyList = styled.div`
+    width:90%;
+    border-top: solid 0.1em #eee;
+    margin:auto;
+    height:3.7em;
+    position:relative;
+    span{
+        display:inline-block;
+        vertical-align:middle;
+    }
+`;
+const StyledPartyListImg = styled.span`
+    position:absolute;
+    left:${(props) => props.seq * 1.2}em;
+    top:0.5em;
+    display:inline-block;
+    overflow:hidden;
+    width:2.5em;
+    height:2.5em;
+    border-radius:50%;
+    border:solid 0.1em white;
+    img{
+        width:100%;
+        height:100%;
+        object-fit: cover;        
+    }
+`;
+const StyledPartyListName = styled.span`
+    position:absolute;
+    line-height:4.5em;
+    left:7.5em;
+    font-size:0.8em;
+`;
+const StyledPartyListInfo = styled.span`
+    display:inline-block;
+    position:absolute;
+    width:5.5em;
+    right:7em;
+    font-size:0.8em;
+    top:0.8em;
+    .partyCnt{
+        color:crimson;
+        padding-right:0.5em;
+    }
+    #autoTimer span{
+        color:#aaa;
+        font-weight:500;
+    }
+    .autoTimerM{
+        padding-left:0.2em;
+    }
+    .autoTimerS{
+        padding-left:0.2em;
+    }
+`;
+const StyledPartyFinished = styled.span`
+    position:absolute;
+    color:#ccc;
+    line-height:3.5em;
+    right:0;
+`;
+const StyledPartyListButton = styled.span`
+    background:green;
+    position:absolute;
+    right:0;
+    top:1.1em;
+    width:6em;
+    line-height:2.5em;
+    background:crimson;
+    color:white;
+    border-radius:5px;
+    font-size:0.8em;
+    cursor:pointer;
+`;
+const StyledTeam = styled.div`
+    display:grid;
+    border-bottom:solid 10px #eee;
+`;
+const StyledReview = styled.div`
+    border-bottom:solid 10px #eee;
+`;
+const StyledParty = styled.div`
+    display:grid;
+    border-bottom:solid 10px #eee;
+`;
+const StyledSeller = styled.div`
+    display:grid;
+    border-bottom:solid 10px #eee;
+`;
+const StyledSectionTitle = styled.div`
+    text-align:left;
+    font-size:0.9em;
+    font-weight:550;
+    padding:5%;
+    padding-bottom:2%;
+`;
+const StyledSectionContent = styled.div`
+    padding: 2% 5%;
+`;
+
+const StyledDetail = styled.div`
+    width:100%;
+`;
+const StyledDetailContainer = styled.div`
+    height:40em;
+    overflow-y:hidden;
+    position:relative;
+`;
+const StyledNoneHtml = styled.div`
+    display:grid;
+    width:100%;
+    font-size:0.8em;
+    color:#aaa;
+    height:10em;
+    align-content:center;
+    border-bottom:solid 1px #ddd;
+`;
+const StyledHtml = styled.div`
+    width:100%;
+`;
+const StyledDetailLinkBox = styled.div`
+    display:grid;
+    background-color: rgba(255, 255, 255, 0.5);
+    position:absolute;
+    bottom:0em;
+    height:3.5em;
+    width:100%;
+`;
+const StyledDetailLink = styled.div`
+    display:grid;
+    align-items:center;
+    background:white;
+    color:crimson;
+    font-size:0.8em;
+    border:solid 1px crimson;
+    margin:2%;
+    border-radius:5px;
+    cursor:pointer;
+`;
+const StyledLink = styled.div`
+    display:grid;
+    text-align:left;
+    padding:3% 5%;
+    grid-template-columns:95% 5%;
+    font-weight:550;
+    font-size:0.9em;
+    align-items:center;
+    border-bottom:solid 1px #ddd;
+    cursor:pointer;
+`;
+const StyledEmpty = styled.div`
+    display:grid;
+    height:3.5em;
+`;
+const StyledButton = styled.div`
+    display:grid;
+    border-radius:8px;
+    color:white;
+    font-size:0.8em;
+    background: crimson;
+    margin:3% 7%;
+    justify-content:center;
+    align-content:center;
+    cursor:pointer;
+`;
+const StyledBuy = styled.div`
+    display:grid;
+    grid-template-columns:${(props) => props.joinState ? '3% 95%' : '10% 40% 40%' };
+    width:100%;
+    height:3em;
+    bottom:0;
+    position:fixed;
+    background:white;
+    border-top:solid 1px #aaa;
+    justify-content:center;
+    padding:1%;
+`;
+const StyledBuyJoinButton = styled.div`
+    position:relative;
+    border-radius:8px;
+    color:white;
+    font-size:0.8em;
+    background: ${(props) => props.joinExp ? "#ccc" : "crimson"};
+    margin:1% 7%;
+    cursor:pointer;
+`;
+const StyledBuyImgBox = styled.span`
+    display:inline-block;
+    position:absolute;
+    left:1em;
+    top:0.6em;
+    width:2em !important;
+    height:2em !important;
+    border-radius:50%;
+    overflow:hidden;
+`;
+const StyledBuyImg = styled.img`
+    width:100%;
+    height:100%;
+    border-radius:50%;
+    object-fit: cover;  
+`;
+const StyledBuyText = styled.span`
+    position:absolute;
+    left:4.5em;
+    top:0.3em;
+    font-size:1em;
+    font-weight:500;
+`;
+const StyledBuyTime = styled.span`
+    position:absolute;
+    left:4.5em;
+    top:1.5em;
+    font-size:1em;
+    font-weight:500;
+`;
+const StyledWish = styled.div`
+    display:grid;
+    align-content:center;
+    svg{
+        color:crimson;
+        font-size:2em;
+        cursor:pointer;
+    }
+`;
+const StyledMaxQty = styled.span`
+    font-size:0.8em;
+    font-weight:bold;
+    color:#0F9D58;
+    margin-left:1.5em;
+`;
+const StyledOption = styled.div`
+    display:grid;
+`;
+const StyledOptionPrice = styled.div`
+    font-weight:bold;
+    color:crimson;
+    text-align:start;
+    font-size:1.3em;
+`;
+const StyledOptionContent = styled.div`
+    display:grid;
+    width:100%;
+    align-content:center;
+    border-bottom:1px solid #ccc;
+    padding:0.5em 0;
+`;
+const StyledOptionTitle = styled.div`
+    text-align:start;
+    font-size:1.05;
+`;
+const StyledOptionSubtitle = styled.span`
+    text-align:start;
+    font-size:0.8em;
+    color:crimson;
+    margin-left:1em;
+    margin-bottom:0.3em;
+    display: ${(props) => props.optChk=="isNot" ? "inline" : "none"};
+`;
+const StyledOptionList = styled.div`
+    text-align:start;
+    word-break:break-all;
+    overflow:auto;
+    height:7em;
+    display:block;
+`;
+const StyledOptionEach = styled.span`
+    display:block;
+    padding:0.5em 1.5em;
+    line-height:1.4em;
+    font-size:1em;
+    margin:0.8em 0;
+    border-radius:0.5em;
+    cursor:pointer;
+    ${(props) => 
+        props.selected ? 
+        `
+            background: crimson;
+            color:white;    
+        ` : 
+        (
+            props.qtyCheck ? 
+            `
+            background: #eee;
+            color:black;        
+            ` 
+            : 
+            `
+            background: #eee;
+            color:#bbb;        
+            ` 
+        )
+    }
+`;
+const StyledOptionCount = styled.div`
+    display:grid;
+    grid-template-columns:5fr 3fr;
+    width:100%;
+    justify-items:start;
+    align-items:center;
+    line-height:2em;  
+`;
+const StyledOptionCountBtn = styled.span`
+    margin: 0 0.5em;
+    color:#555;
+    font-size:1.3em;
+    cursor:pointer;
+    svg{
+        vertical-align:middle;
+    }
+`;
+const StyledOptionCountNumber = styled.span`
+    display:inline-block;
+    width:1em;
+    font-size:1.2em;
+`;
+const StyledReviewLinkBox = styled.div`
+    display:grid;
+    background-color: rgba(255, 255, 255, 0.5);
+    height:3.5em;
+    width:100%;
+`;
+const StyledReviewLink = styled.span`
+    background:white;
+    color:crimson;
+    font-size:0.8em;
+    border:solid 1px crimson;
+    margin:2%;
+    border-radius:5px;
+    line-height:3em;
+    svg{
+        font-size:1.5em;
+        vertical-align:middle;
+    }
+`;

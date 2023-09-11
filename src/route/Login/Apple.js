@@ -24,11 +24,7 @@ const Apple = () => {
     }, []);
 
     //render
-    return(
-        <>
-            <StyledLoadingMsg>애플아이디로 로그인 중입니다...</StyledLoadingMsg>
-        </>  
-    )    
+    return <StyledLoadingMsg>애플아이디로 로그인 중입니다...</StyledLoadingMsg>
 };
 
 export default Apple;

@@ -5,7 +5,6 @@ import { apiCall, onErrorImg } from "lib";
 import { useNavigate } from "react-router-dom";
 
 //------------------------------ CSS ----------------------------------------
-
 const StyledReviewOrder = styled.div`
     width: 100%;
     padding-bottom: 15em;

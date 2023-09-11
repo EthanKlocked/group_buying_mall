@@ -94,9 +94,6 @@ const Search = React.memo(({categoryId}) => {
     const { base } = useContext(BaseContext);
     const menuCategory = Object.entries(base.useCtg);
 
-    //state
-    //const [srchCnt, setSrchCnt] = useState(true);
-
     //function
     const clickSearch = (keyword) => {
         const cacheData = cache;
@@ -109,7 +106,6 @@ const Search = React.memo(({categoryId}) => {
 
     const categoryMove = (target) => { //category navigate exec
         window.location.replace(target);
-        //navigate(target);
     }
 
     //memo
@@ -160,8 +156,7 @@ const Search = React.memo(({categoryId}) => {
     <ItemList search={srch}/>
     :
     (
-        <StyledSearch>            
-            {/*recommendGear*/}
+        <StyledSearch>
             {categoryListGear}
         </StyledSearch>
     )

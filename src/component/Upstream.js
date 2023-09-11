@@ -6,22 +6,6 @@ import { scrollTo } from 'seamless-scroll-polyfill';
 import { useLocation } from "react-router-dom";
 import { SimpleMotion } from "component";
 
-//------------------------------ CSS ----------------------------------------
-const StyledDiv = styled.div`
-    position:fixed;
-    right: 5%;
-    bottom:12%;
-    z-index:4;
-    height:3em;
-    width:3em;
-    border-radius:50%;
-    background:white;
-    box-shadow: 0px 0px 30px #ddd;
-    margin-top:0.2em;
-    color:gray;
-    cursor:pointer;
-`;
-
 //------------------------------ COMPONENT ----------------------------------
 const Upstream = React.memo(() => {
     //init
@@ -69,3 +53,19 @@ const Upstream = React.memo(() => {
 });
 
 export default Upstream;
+
+//------------------------------ CSS ----------------------------------------
+const StyledDiv = styled.div`
+    position:fixed;
+    right: 5%;
+    bottom:12%;
+    z-index:4;
+    height:3em;
+    width:3em;
+    border-radius:50%;
+    background:white;
+    box-shadow: 0px 0px 30px #ddd;
+    margin-top:0.2em;
+    color:gray;
+    cursor:pointer;
+`;

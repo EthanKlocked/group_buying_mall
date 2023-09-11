@@ -2,114 +2,11 @@
 import styled from "styled-components";
 import { apiCall, priceForm } from "lib";
 import React, { useState, useRef, useCallback, useEffect, useContext, useMemo } from 'react';
-import { CustomLoading, ItemListLoading, StarScore, SimpleMotion } from "component";
+import { CustomLoading, StarScore, SimpleMotion } from "component";
 import { useNavigate, useLocation } from "react-router-dom";
 import { CacheContext, BaseContext } from "context";
 import { elementScrollIntoView } from 'seamless-scroll-polyfill';
 import { onErrorImg, useDidMountEffect } from "lib";
-
-//------------------------------ CSS ----------------------------------------
-const StyledList = styled.div`
-    text-align:center;
-`;
-const StyledContent = styled.span`
-    display:${(props)=> props.block ? 'block' : 'inline-block'};
-    width:45%;
-    margin:2%;
-    vertical-align:top;
-    cursor:pointer;
-`;
-const StyledImg = styled.img`
-    width:100%;
-    border-radius:0.7em;
-`;
-const StyledName = styled.div`
-    font-size:0.9em;
-    text-align:left;
-    margin: 0.2em 0;
-`;
-const StyledTag = styled.div`
-    font-size:0.8em;
-    text-align:start;
-    margin: 0.2em 0;
-`;
-const StyledPercent = styled.span`
-    text-align:start;
-    font-weight:500;
-`;
-const StyledTagPrice = styled.span`
-    text-decoration:line-through;
-    color:#888;
-    text-align:start;
-    margin-left:1em;
-`;
-const StyledPrice = styled.div`
-    font-size:1em;
-    color:crimson;
-    font-weight:500;
-    text-align:start;
-    margin: 0.2em 0;
-`;
-const StyledResult = styled.div`
-`;
-const StyledIsNot = styled.div`
-    color:#aaa;
-    font-size:0.8em;
-    padding-bottom:20%;
-    border-bottom:solid 0.5em #eee;    
-    padding:10%;
-    align-content:center;
-`;
-const StyledSuggest = styled.div`
-    display:grid;
-    padding-top:5%;
-    color:#aaa;
-    font-size:1em;
-`;
-const StyledSuggestTitle = styled.div`
-    display:grid;
-    color:black;
-    font-size:1em;
-    padding-bottom:3%;
-`;
-const StyledSuggestMsg = styled.div`
-    display:grid;
-    font-size:0.8em;
-    padding-bottom:3%;
-`;
-const StyledSuggestBtn = styled.a`
-    display:grid;
-    background:crimson;
-    width:85%;
-    height:3em;
-    justify-self:center;
-    border-radius:0.5em;
-    align-content:center;
-    color:white;
-    font-size:0.9em;
-`;
-const StyledSortBox = styled.div`
-    padding:1em 0;
-    text-align:start;
-`;
-const StyledSortOption = styled.span`
-    padding:0.4em 0.7em;
-    margin-left: 3%;
-    border-radius:1em;
-    border:solid 0.05em ${(props)=>props.selected ? 'crimson' : '#ddd'};
-    color:${(props)=>props.selected ? 'white' : '#999'};
-    font-size:0.8em;
-    background: ${(props)=>props.selected ? 'crimson' : 'white'};
-    cursor:pointer;
-`;
-/*
-const StyledFooterBusinessInfo = styled.div`
-    text-align:start;
-    padding:6em 2.5em;
-    font-size:0.6em;
-    background:#f5f5f5;
-`;
-*/
 
 //------------------------------ COMPONENT ----------------------------------
 const ItemList = React.memo(({ category, search, rows=8, loadingCover=false, coverTop=0, selectOpt=null }) => {
@@ -326,7 +223,6 @@ const ItemList = React.memo(({ category, search, rows=8, loadingCover=false, cov
             console.log(cache[pathname].scrollIndex);
 
             //----MOVE TO SCROLL TARGET----//
-            
             if(cache[pathname].scrollIndex > 1 ){
                 setScrollLoading(true);
                 setTimeout(() => setScrollLoading(false), 500);
@@ -406,23 +302,6 @@ const ItemList = React.memo(({ category, search, rows=8, loadingCover=false, cov
     }, [])
 
     const lastGear = useMemo(() => {
-        /*
-        return (lastChk.current) ? (
-            <StyledFooterBusinessInfo>
-                법인명 : {base.companyName} <br/>
-                대표자 : {base.companyOwner} <br/>
-                사업자 등록번호 : {base.saupjaNo} <br/>
-                통신판매업 신고번호 : {base.tolsinNo} <br/>
-                주소 : {base.companyAddr} <br/>
-                이메일 : {base.companyEmail} <br/>
-                Copyright©{base.shopId} Corp.All right reserved.<br />
-                <br />
-                <br />
-                <br />                
-            </StyledFooterBusinessInfo>                        
-        ) : null;
-        */
-
         return (
             (lastChk.current) ? 
             <div style={{'fontSize':'0.7em', 'color':'#bbb', 'marginTop':'30px'}}>마지막 상품입니다.</div> : 
@@ -445,7 +324,6 @@ const ItemList = React.memo(({ category, search, rows=8, loadingCover=false, cov
     return (
         <div style={{position:"relative"}}>  
             {scrollLoading ? <CustomLoading opacity={0.5} cover={loadingCover} coverTop={coverTop}/> : null}
-            {/*loading ? <ItemListLoading /> : null*/}
             {sortGear}
             {goods && goods.length > 0 ? goodsGear : null} 
             {goods && goods.length < 1 && !cache.hasOwnProperty(pathname) ? nthGear : null} 
@@ -457,3 +335,97 @@ const ItemList = React.memo(({ category, search, rows=8, loadingCover=false, cov
 
 export default ItemList;
 
+//------------------------------ CSS ----------------------------------------
+const StyledList = styled.div`
+    text-align:center;
+`;
+const StyledContent = styled.span`
+    display:${(props)=> props.block ? 'block' : 'inline-block'};
+    width:45%;
+    margin:2%;
+    vertical-align:top;
+    cursor:pointer;
+`;
+const StyledImg = styled.img`
+    width:100%;
+    border-radius:0.7em;
+`;
+const StyledName = styled.div`
+    font-size:0.9em;
+    text-align:left;
+    margin: 0.2em 0;
+`;
+const StyledTag = styled.div`
+    font-size:0.8em;
+    text-align:start;
+    margin: 0.2em 0;
+`;
+const StyledPercent = styled.span`
+    text-align:start;
+    font-weight:500;
+`;
+const StyledTagPrice = styled.span`
+    text-decoration:line-through;
+    color:#888;
+    text-align:start;
+    margin-left:1em;
+`;
+const StyledPrice = styled.div`
+    font-size:1em;
+    color:crimson;
+    font-weight:500;
+    text-align:start;
+    margin: 0.2em 0;
+`;
+const StyledResult = styled.div`
+`;
+const StyledIsNot = styled.div`
+    color:#aaa;
+    font-size:0.8em;
+    padding-bottom:20%;
+    border-bottom:solid 0.5em #eee;    
+    padding:10%;
+    align-content:center;
+`;
+const StyledSuggest = styled.div`
+    display:grid;
+    padding-top:5%;
+    color:#aaa;
+    font-size:1em;
+`;
+const StyledSuggestTitle = styled.div`
+    display:grid;
+    color:black;
+    font-size:1em;
+    padding-bottom:3%;
+`;
+const StyledSuggestMsg = styled.div`
+    display:grid;
+    font-size:0.8em;
+    padding-bottom:3%;
+`;
+const StyledSuggestBtn = styled.a`
+    display:grid;
+    background:crimson;
+    width:85%;
+    height:3em;
+    justify-self:center;
+    border-radius:0.5em;
+    align-content:center;
+    color:white;
+    font-size:0.9em;
+`;
+const StyledSortBox = styled.div`
+    padding:1em 0;
+    text-align:start;
+`;
+const StyledSortOption = styled.span`
+    padding:0.4em 0.7em;
+    margin-left: 3%;
+    border-radius:1em;
+    border:solid 0.05em ${(props)=>props.selected ? 'crimson' : '#ddd'};
+    color:${(props)=>props.selected ? 'white' : '#999'};
+    font-size:0.8em;
+    background: ${(props)=>props.selected ? 'crimson' : 'white'};
+    cursor:pointer;
+`;

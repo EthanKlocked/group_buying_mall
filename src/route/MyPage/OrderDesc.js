@@ -2,9 +2,8 @@
 import { useNavigate, useLocation } from "react-router-dom";
 import styled from "styled-components";
 import { Title } from "component";
-import { useState, useEffect, useContext } from "react";
+import { useState, useEffect} from "react";
 import { apiCall, priceForm } from "lib";
-import { BaseContext } from "context";
 
 //------------------------------ CSS ----------------------------------------
 const StyledOrderDesc = styled.div`
@@ -90,9 +89,6 @@ const StyledEachRow = styled.div`
 
 //------------------------------ COMPONENT ----------------------------------
 const OrderDesc = () => {
-    //context
-    const { base } = useContext(BaseContext);
-
     //init
     const { state } = useLocation();
     const navigate = useNavigate();

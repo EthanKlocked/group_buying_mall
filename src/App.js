@@ -50,7 +50,6 @@ import { //routing pages
         PrivacyPolicy,
         MarketingConsent,
         PcWindow,
-        FlappyBird
 } from "route";
 import { Navigation, Upstream, ErrorHandler } from "component";
 import React, { useState, useEffect } from "react";
@@ -165,7 +164,6 @@ const App = () => {
                             <Route path="TermsOfUse" element={<TermsOfUse />} />
                             <Route path="PrivacyPolicy" element={<PrivacyPolicy />} />
                             <Route path="MarketingConsent" element={<MarketingConsent />} />
-                            <Route path="Game/FlappyBird" element={<FlappyBird />} />
                             <Route path="/*" element={<Navigate to="/Home/Main" replace />} />
                         </Routes>
                         <Upstream/>

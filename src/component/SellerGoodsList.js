@@ -121,20 +121,14 @@ const StyledSellerMainButton = styled.div`
 const StyledSellerMainGoods = styled.div`
 `;
 
-
 //------------------------------ COMPONENT ----------------------------------
 const SellerGoodsList = ({sellerId, nowGoods=null, limit=null}) => {
     //init
     const navigate = useNavigate();    
 
-    //ref
-    const observer = useRef();
-    const lastChk = useRef(false);
-
     //state
     const [data, setData] = useState(null);
     const [page, setPage] = useState(1);
-    const [pageLoading, setPageLoading] = useState(false);
 
 
     //function
@@ -155,7 +149,6 @@ const SellerGoodsList = ({sellerId, nowGoods=null, limit=null}) => {
 
     const movePage = (gsId) => {
         window.scrollTo(0,0);
-        //navigate('/Description', { state: { id: gsId } });
         navigate('/InterceptPage?goal=/Description', { state: { id: gsId }, replace: true });
     }
 

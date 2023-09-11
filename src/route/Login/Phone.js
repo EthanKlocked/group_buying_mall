@@ -7,102 +7,6 @@ import { Title, CheckList, Modal, MobileInput, NumberInput, AutoTimer } from "co
 import { OrderContext, SelfContext, BaseContext } from "context";
 import { msgData, termsData } from "static";
 
-//------------------------------ CSS ----------------------------------------
-const StyledPhone = styled.div`
-    height:100%;
-`;
-const StyledContent = styled.div`
-    height:75%;
-    display:grid;
-    padding:3.5em 8% 0 8%;
-    grid-template-columns: repeat(3, 1fr);
-    grid-template-rows: 1fr 0.75fr 0.5fr 1fr 0.8fr 1fr 2.5fr 1fr;
-    align-content:space-evenly;
-`;
-const StyledTitle = styled.div`
-    display:grid;
-    grid-column: 1 / span 3;
-    justify-content:left;
-    align-content:flex-end;
-    font-size:0.8em;
-    font-weight:bold;
-    margin-bottom:3%;
-`;
-const StyledSubTitle = styled.div`
-    display:grid;
-    height:1em;
-    grid-column: 1 / span 2;
-    justify-self:left;
-    font-size:0.6em;
-    color:${(props) => props.chk == "sentCertNum" || props.chk == "passedCert" ? 'green' : 'red'};
-`;
-const StyledInputBox1 = styled.div`
-    display:grid;
-    grid-column: 1 / span 2;
-    height:2.2em;
-    border-radius:0.5em;
-    font-size:0.8em;
-    background:#eee;
-    padding: 1%;
-`;
-const StyledInputBox2 = styled.div`
-    display:grid;
-    grid-column: 1 / span 3;
-    height:2.15em;
-    border-radius:0.5em;
-    background:#eee;
-    padding: 1%;    
-    align-content:center;
-    font-size:0.8em;
-    grid-template-columns: 10fr 3fr;
-`;
-const StyledButton1 = styled.div`
-    display:grid;
-    margin-left:20%;
-    align-content:center;
-    background:crimson;
-    color:white;
-    width:80%;
-    height:2.5em;
-    font-size:0.8em;
-    border-radius:0.5em;
-    cursor:pointer;
-`;
-const StyledButton2 = styled.div`
-    display:grid;
-    grid-column: 3 / span 3;
-    margin-left:20%;
-    height:2.5em;
-    align-content:center;
-    background:${(props)=>props.active ? '#aaa' : 'crimson'};
-    color:white;
-    font-size:0.8em;
-    border-radius:0.5em;
-    cursor:pointer;
-`;
-const StyledSubmit = styled.div`
-    display:grid;
-    grid-column: 1 / span 3;
-    background:black;
-    height:2.5em;
-    align-content:center;
-    background:crimson;
-    border-radius:0.5em;
-    font-size:0.8em;
-    color:white;
-    margin-top:5%;
-    cursor:pointer;
-`;
-const StyledListBox = styled.div`
-    display:grid;
-    grid-column: 1 / span 3;
-`;
-const StyledModalText = styled.div`
-    *{
-        text-align:start;
-    }    
-`;
-
 //------------------------------ COMPONENT ----------------------------------
 const Phone = () => {
     //context
@@ -113,11 +17,13 @@ const Phone = () => {
     //init
     const navigate = useNavigate();
     const SearchParams = new URLSearchParams(useLocation().search);
+    const hostId = SearchParams.get('hostId');   
     const APPLE_RESULT = SearchParams.get('res');    
     const APPLE_SUB = SearchParams.get('sub');    
     const APPLE_LOGIN_MEM = SearchParams.get('memId');       
     const APPLE_NAME = SearchParams.get('name');       
-    const APPLE_EMAIL = SearchParams.get('email');       
+    const APPLE_EMAIL = SearchParams.get('email');      
+
     const checkList = [
         {
             checked: false,
@@ -246,7 +152,6 @@ const Phone = () => {
         //----LEVEL1 PASSED----//
         setSendingChk("end");
         setLevel1(true);
-        //navigate('/Login/Phone?extraHide', { replace : true }); // for input scan
         setExpired(false);
     };
 
@@ -296,9 +201,9 @@ const Phone = () => {
         }
         if(requiredChk){
             const checkedEmail = APPLE_EMAIL && APPLE_EMAIL.endsWith('appleid.com') ? null : APPLE_EMAIL;
-
+            const extraParams = hostId ? `?hostId=${hostId}` : '';
             navigate(
-                '/Login/Auth', 
+                `/Login/Auth${extraParams}`,
                 { 
                     replace: true, 
                     state: { 
@@ -492,3 +397,99 @@ const Phone = () => {
 };
 
 export default Phone;
+
+//------------------------------ CSS ----------------------------------------
+const StyledPhone = styled.div`
+    height:100%;
+`;
+const StyledContent = styled.div`
+    height:75%;
+    display:grid;
+    padding:3.5em 8% 0 8%;
+    grid-template-columns: repeat(3, 1fr);
+    grid-template-rows: 1fr 0.75fr 0.5fr 1fr 0.8fr 1fr 2.5fr 1fr;
+    align-content:space-evenly;
+`;
+const StyledTitle = styled.div`
+    display:grid;
+    grid-column: 1 / span 3;
+    justify-content:left;
+    align-content:flex-end;
+    font-size:0.8em;
+    font-weight:bold;
+    margin-bottom:3%;
+`;
+const StyledSubTitle = styled.div`
+    display:grid;
+    height:1em;
+    grid-column: 1 / span 2;
+    justify-self:left;
+    font-size:0.6em;
+    color:${(props) => props.chk == "sentCertNum" || props.chk == "passedCert" ? 'green' : 'red'};
+`;
+const StyledInputBox1 = styled.div`
+    display:grid;
+    grid-column: 1 / span 2;
+    height:2.2em;
+    border-radius:0.5em;
+    font-size:0.8em;
+    background:#eee;
+    padding: 1%;
+`;
+const StyledInputBox2 = styled.div`
+    display:grid;
+    grid-column: 1 / span 3;
+    height:2.15em;
+    border-radius:0.5em;
+    background:#eee;
+    padding: 1%;    
+    align-content:center;
+    font-size:0.8em;
+    grid-template-columns: 10fr 3fr;
+`;
+const StyledButton1 = styled.div`
+    display:grid;
+    margin-left:20%;
+    align-content:center;
+    background:crimson;
+    color:white;
+    width:80%;
+    height:2.5em;
+    font-size:0.8em;
+    border-radius:0.5em;
+    cursor:pointer;
+`;
+const StyledButton2 = styled.div`
+    display:grid;
+    grid-column: 3 / span 3;
+    margin-left:20%;
+    height:2.5em;
+    align-content:center;
+    background:${(props)=>props.active ? '#aaa' : 'crimson'};
+    color:white;
+    font-size:0.8em;
+    border-radius:0.5em;
+    cursor:pointer;
+`;
+const StyledSubmit = styled.div`
+    display:grid;
+    grid-column: 1 / span 3;
+    background:black;
+    height:2.5em;
+    align-content:center;
+    background:crimson;
+    border-radius:0.5em;
+    font-size:0.8em;
+    color:white;
+    margin-top:5%;
+    cursor:pointer;
+`;
+const StyledListBox = styled.div`
+    display:grid;
+    grid-column: 1 / span 3;
+`;
+const StyledModalText = styled.div`
+    *{
+        text-align:start;
+    }    
+`;

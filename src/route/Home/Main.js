@@ -1,72 +1,20 @@
 //------------------------------ MODULE -------------------------------------
 import styled from "styled-components";
-import { ImgSwiper, ItemList, TeamMain, SimpleMotion } from "component";
+import { ImgSwiper, ItemList, TeamMain, SimpleMotion, AttendButton } from "component";
 import { FcAlarmClock, FcLeave, FcApproval } from "react-icons/fc";
 import React, { useState, useEffect, useMemo } from 'react';
 import { apiCall } from 'lib';
 import bannerArea from 'data/img/bannerArea.png';
 
-//------------------------------ CSS ----------------------------------------
-const StyledMain = styled.div`
-    background:white;
-`;
-const StyledBanner = styled.div`
-    height:121px;
-`;
-const StyledNoBanner = styled.div`
-    width:100%;
-    img{
-        width:100%;
-    }
-`;
-const StyledTitle = styled.div`
-    margin: 1em 0 0 0.9em;
-`;
-const StyledMainTitle = styled.div`
-    font-weight:bold;
-    text-align:start;
-    font-size:1em;
-`;
-const StyledRowSemiTitle = styled.div`
-    font-size:0.8em;
-    text-align:start;
-    color:#888;
-`;
-const StyledEvent = styled.div`
-    display:grid;
-    grid-template-columns: repeat(3, 1fr);
-    padding:5% 0;
-    border-bottom:solid 0.6em #f5f5f5;
-`;
-const StyledEventButton = styled.div`
-`;
-const StyledEventIcon = styled.div`
-    font-size:2.5em;
-`;
-const StyledEventName = styled.div`
-    font-size:0.5em;
-`;
-const StyledTeam = styled.div`
-    border-bottom:solid 0.6em #f5f5f5;
-    height:11.5em;
-`;
-const StyledItems = styled.div`
-`;
-
 //------------------------------ COMPONENT ----------------------------------
 const Main = React.memo(({categoryId}) => {
     //state
-    const [loading, setLoading] = useState(true);
-    const [error, setError] = useState(null);
     const [banners, setBanners] = useState(null);
     const [teamData, setTeamData] = useState(null);
 
     //function
     const initData = async() => {
         try {
-            setError(null);
-            setLoading(true);
-
             //bannerData
             setBanners([]);
             let params = { position : 6 };
@@ -87,11 +35,8 @@ const Main = React.memo(({categoryId}) => {
             
             setTeamData(teamListData);
         }catch(e){
-            setError(e);
+            console.log(e);
         }
-        setTimeout(() => {
-            setLoading(false);
-        }, 500);        
     }
 
     //effect
@@ -140,12 +85,10 @@ const Main = React.memo(({categoryId}) => {
                     <StyledMainTitle>나만 사면 돼</StyledMainTitle>
                     <StyledRowSemiTitle>남은 인원 1명! 서두르세요</StyledRowSemiTitle>
                 </StyledTitle>
-                
                 <SimpleMotion>
-                <StyledTeam>
-                    <TeamMain teamData={teamData}/>
-                    {/* <YoutubeSwiper youtube = {videoBox}/> */}
-                </StyledTeam>
+                    <StyledTeam>
+                        <TeamMain teamData={teamData}/>
+                    </StyledTeam>
                 </SimpleMotion>
             </>
         )
@@ -153,25 +96,71 @@ const Main = React.memo(({categoryId}) => {
 
     const itemGear = useMemo(() => {
         return (
-            <>
-                <StyledItems>
-                    <ItemList loadingCover={true} coverTop="7em"/>
-                </StyledItems>
-            </>            
+            <StyledItems>
+                <ItemList loadingCover={true} coverTop="7em"/>
+            </StyledItems>           
         )
     }, []);
+
     //render
     return (
         <>
         <StyledMain>
-            {/*loading ? <MainLoading /> : null*/}
             {bannerGear} 
             {eventGear}
             {teamGear} 
             {itemGear}
+            <AttendButton/>
         </StyledMain>
         </>
     )    
 });
 
 export default Main;
+
+//------------------------------ CSS ----------------------------------------
+const StyledMain = styled.div`
+    background:white;
+`;
+const StyledBanner = styled.div`
+    height:121px;
+`;
+const StyledNoBanner = styled.div`
+    width:100%;
+    img{
+        width:100%;
+    }
+`;
+const StyledTitle = styled.div`
+    margin: 1em 0 0 0.9em;
+`;
+const StyledMainTitle = styled.div`
+    font-weight:bold;
+    text-align:start;
+    font-size:1em;
+`;
+const StyledRowSemiTitle = styled.div`
+    font-size:0.8em;
+    text-align:start;
+    color:#888;
+`;
+const StyledEvent = styled.div`
+    display:grid;
+    grid-template-columns: repeat(3, 1fr);
+    padding:5% 0;
+    border-bottom:solid 0.6em #f5f5f5;
+`;
+const StyledEventButton = styled.div`
+`;
+const StyledEventIcon = styled.div`
+    font-size:2.5em;
+`;
+const StyledEventName = styled.div`
+    font-size:0.5em;
+`;
+const StyledTeam = styled.div`
+    border-bottom:solid 0.6em #f5f5f5;
+    height:11.5em;
+`;
+const StyledItems = styled.div`
+`;

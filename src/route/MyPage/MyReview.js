@@ -167,11 +167,9 @@ const MyReview = React.memo(() => {
                     <StyledContentList id="contentList">
                         <StyledContentItem>
                             <ReviewOrder limit={5} bridgeChk={bridge}/>
-                            {/*<TeamList limit={5} alertHandler={setTeamAlert}/>*/}
                         </StyledContentItem>
                         <StyledContentItem>
                             <MyReviewList limit={5} wideImg={setImgBox} confirmHandler={setConfirm} bridgeHandler={setBridge}/>
-                            {/*<ReviewList limit={5} dayCnt={10} wideImg={setImgBox} /> */}
                         </StyledContentItem>                    
                     </StyledContentList>
                 </StyledContent>

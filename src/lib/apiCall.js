@@ -14,12 +14,14 @@ const apiCall = axios.create({
 
 apiCall.interceptors.request.use(
     function (config) {
+        if(config.method=="put"||config.method=="post") config.headers['Content-Type'] = 'application/x-www-form-urlencoded; charset=UTF-8';
+
         delete apiCall.defaults.headers.common.Authorization;
         delete apiCall.defaults.headers.common.RefreshToken; 
-               
+
         const token = localStorage.getItem("token");
         if (config.headers && token) {
-            const { access, refresh } = JSON.parse(token);
+            const { access } = JSON.parse(token);
             config.headers["Authorization"] = `${access}`;
             return config;
         }

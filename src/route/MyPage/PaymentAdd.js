@@ -120,11 +120,6 @@ const PaymentAdd = () => {
             if(thisVal.length==length){
                 const nextInput = document.getElementById(`i${Number(thisIndex)+1}`);
                 if(nextInput) nextInput.focus();
-            }else if(thisVal.length==0){
-                /*
-                const nextInput = document.getElementById(`i${Number(thisIndex)-1}`);
-                if(nextInput) nextInput.focus();
-                */
             }
         },0);
     }

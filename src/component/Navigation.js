@@ -7,35 +7,6 @@ import {isAndroid} from "react-device-detect";
 import ReactGA4 from 'react-ga4';
 import { CacheContext } from "context";
 
-//------------------------------ CSS ----------------------------------------
-const StyledDiv = styled.div`
-    display:grid;
-    ${(props)=> props.display?'display:none':null};
-    width: 80%;
-    height:3.5em;
-    grid-template-columns: repeat(4, 1fr);
-    background:white;
-    border-radius: 10em;
-    box-shadow: 0px 0px 30px #ddd;
-    align-content:center;
-    position:fixed;
-    margin: 0 auto;
-    left: 0;
-    right: 0;
-    bottom:1%;
-    z-index:5;
-`;
-const StyledSpan = styled.span`
-    display:grid;
-    width: 100%;
-    justify-content:center;
-`;
-const StyledIcon = styled.span`
-    display:grid;
-    color:${(props) => props.selected ? "red" : "gray"};
-    font-size:1.6em;
-`;
-
 //------------------------------ COMPONENT ----------------------------------
 const Navigation = React.memo(() => {
     //context
@@ -113,7 +84,7 @@ const Navigation = React.memo(() => {
                             onClick={pathname.startsWith("/Home") 
                                 ? (e) => e.preventDefault() 
                                 : () => {
-                                    /*2023-01-11 added <for reinitiating all list cache> this event precedes navigation event*/
+                                    // added <for reinitiating all list cache> this event precedes navigation event
                                     setCacheHandler(new Object);
                                 }
                             }
@@ -146,3 +117,32 @@ const Navigation = React.memo(() => {
 });
 
 export default Navigation;
+
+//------------------------------ CSS ----------------------------------------
+const StyledDiv = styled.div`
+    display:grid;
+    ${(props)=> props.display?'display:none':null};
+    width: 80%;
+    height:3.5em;
+    grid-template-columns: repeat(4, 1fr);
+    background:white;
+    border-radius: 10em;
+    box-shadow: 0px 0px 30px #ddd;
+    align-content:center;
+    position:fixed;
+    margin: 0 auto;
+    left: 0;
+    right: 0;
+    bottom:1%;
+    z-index:5;
+`;
+const StyledSpan = styled.span`
+    display:grid;
+    width: 100%;
+    justify-content:center;
+`;
+const StyledIcon = styled.span`
+    display:grid;
+    color:${(props) => props.selected ? "red" : "gray"};
+    font-size:1.6em;
+`;

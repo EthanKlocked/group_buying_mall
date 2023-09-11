@@ -56,5 +56,3 @@ export { default as PrivacyPolicy } from "./PrivacyPolicy";
 export { default as MarketingConsent } from "./MarketingConsent";
 
 export { default as PcWindow } from "./PcWindow";
-
-export { default as FlappyBird } from "./Game/FlappyBird";

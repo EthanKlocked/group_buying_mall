@@ -42,7 +42,6 @@ const TossSuccess = () => {
             //order status 1
             params = { 
                 'orderNum' : orderId,
-                //'orderStatus' : '0', //backend response nth cuz there is no method for changing status to zero
                 'teamId' : 'reset',
             };
             const soldOutOrderUpdateResult = await apiCall.put("/order", {params}, {headers}); //orderCancel
@@ -56,7 +55,6 @@ const TossSuccess = () => {
                 //order status 1
                 params = { 
                     'orderNum' : orderId,
-                    //'orderStatus' : '0', //backend response nth cuz there is no method for changing status to zero
                     'teamId' : 'reset',
                 };
                 const fullOrderUpdateResult = await apiCall.put("/order", {params}, {headers}); //orderCancel

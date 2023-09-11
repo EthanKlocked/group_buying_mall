@@ -1,7 +1,7 @@
 //------------------------------ MODULE -------------------------------------
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
-import { Title,  } from "component";
+import { Title } from "component";
 import { useCallback, useState, useMemo, useEffect, useContext } from "react";
 import { apiCall } from "lib";
 import { RiDeleteBin6Line } from "react-icons/ri";
@@ -183,10 +183,6 @@ const AddressUpdate = () => {
             }
             const headers = {'Content-Type' : 'application/x-www-form-urlencoded; charset=UTF-8'};
             const result = await apiCall.put("/self", {params}, {headers});    
-            if(result.data == '000'){
-                //const updateData = await apiCall.get(`/self/self`);
-                //setSelfHandler(updateData.data); //----SELF CONTEXT UPDATE----//
-            } 
             navigate(-1);
         }catch(e){
             setError(e);

@@ -57,12 +57,6 @@ const SearchBar = React.memo(() => {
         if(cacheData.hasOwnProperty('/Home/Search')) delete cacheData['/Home/Search'];
         setCacheHandler(cacheData);
 
-        //easterEgg
-        if(keyword == 'FlappyBird'){
-            setSrchHandler(null);
-            navigate('/Game/FlappyBird');
-        }
-
         //set
         setSrchHandler({srch : 'name', kwd : keyword});
     }, [keyword]);

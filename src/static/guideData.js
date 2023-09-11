@@ -1,7 +1,6 @@
 //------------------------------ MODULE -------------------------------------
 import styled from "styled-components";
-import { FcCollaboration, FcCurrencyExchange, FcShare, FcShipped, FcUndo } from "react-icons/fc";
-import { RiKakaoTalkFill } from "react-icons/ri";
+import { FcCollaboration, FcCurrencyExchange, FcShipped, FcUndo } from "react-icons/fc";
 import linkIcon from 'data/img/linkIcon.png';
 
 //------------------------------ CSS ----------------------------------------
@@ -58,8 +57,6 @@ const guideData = [
         <>
         <StyledModalTitle>링크를 공유해 함께 구매할 새 팀원을 데려오세요.</StyledModalTitle>
         <StyledModalIcon>
-            {/*<FcShare size="6em"/> */}
-            {/*<RiKakaoTalkFill size="6em"/>*/}
             <img src={linkIcon}/>
         </StyledModalIcon>
         <StyledModalContent>

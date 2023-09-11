@@ -155,7 +155,6 @@ const TeamMain = React.memo(({teamData}) => {
         element.style["bottom"] = "0";
         element.style["right"] = "0";
         element.style['border-radius'] = "0.5em";
-        //document.getElementById(id).children[0].innerHTML = 'TIME OUT';
     }
 
     const tokenTest = async() => {
@@ -262,7 +261,6 @@ const TeamMain = React.memo(({teamData}) => {
         <StyledContainer id="teamTouch">
             <StyledContent w={teamData.length}>
                 <Motion isOn={teamData.length ? 1 : 0} isVisible={true} duration={0.2} overflow={null}>
-                {/*fisrtGear*/}
                 {middleGear}
                 {lastGear}
                 </Motion>

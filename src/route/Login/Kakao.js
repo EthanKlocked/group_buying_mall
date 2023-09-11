@@ -28,6 +28,7 @@ const Kakao = () => {
     const KAKAO_API_KEY = process.env.REACT_APP_KAKAO_KEY;
     const KAKAO_REDIRECT = process.env.REACT_APP_KAKAO_REDIRECT;
     const SearchParams = new URLSearchParams(useLocation().search);
+    const hostId = SearchParams.get('state');   
     const authCode = SearchParams.get('code');    
     const editor = useRef(null);
 
@@ -101,10 +102,13 @@ const Kakao = () => {
                 return;
             }
             if(result.data.res == "SUCCESS"){
+                //point process         
+                apiCall.put("/member/any/point", { type : 'join', id: result.data.id, phone: result.data.phone }, {headers});
+                if(hostId) apiCall.put("/member/any/point", { type : 'invite', id: hostId, phone: result.data.phone }, {headers});
+
+                //login
                 login(result.data.token, result.data.type, result.data.nick);
             }else{
-                console.log(result.data.error);
-                console.log(result.data);
                 setAlert(true);
                 return false; 
             }            

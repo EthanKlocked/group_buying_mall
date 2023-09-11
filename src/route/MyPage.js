@@ -4,14 +4,315 @@ import { useNavigate } from "react-router-dom";
 import React, { useState, useEffect, useContext, useCallback, useMemo } from "react";
 import { BsGear } from "react-icons/bs";
 import { IoIosArrowForward, IoIosHeartEmpty, IoMdClose } from "react-icons/io";
-import { RiCustomerService2Line, RiPhoneFindLine, RiQuestionMark, RiDeleteBack2Line, RiTeamLine, RiUserReceived2Line } from "react-icons/ri";
+import { RiCustomerService2Line, RiPhoneFindLine, RiQuestionMark, RiTeamLine, RiUserReceived2Line } from "react-icons/ri";
 import { MdOutlineLocalShipping, MdOutlineRateReview } from "react-icons/md";
 import { FiPackage } from "react-icons/fi";
 import { apiCall, touchSlide, priceForm } from "lib";
-import { Modal, GoodsSwiper, SimpleMotion, QuestionIcon, PointInfo } from "component";
+import { Modal, GoodsSwiper, SimpleMotion, QuestionIcon, PointInfo, InviteGuest } from "component";
 import { BaseContext, SelfContext } from "context";
 import { msgData } from "static";
 import { BiConversation } from "react-icons/bi";
+
+//------------------------------ COMPONENT ----------------------------------
+const MyPage = React.memo(() => {
+    //init
+    const navigate = useNavigate();
+
+    //context
+    const { base } = useContext(BaseContext);
+    const { setSelfHandler } = useContext(SelfContext);
+
+    //state
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState(null);
+    const [data, setData] = useState(null);
+    const [orderState, setOrderState] = useState(null);
+    const [logoutConfirm, setLogoutConfirm] = useState(false);
+    
+    //function
+    const initData = async() => {
+        try {
+            setError(null);
+            setLoading(true);
+            setData(null);
+            let params;
+
+            //goods
+            const browse = JSON.parse(sessionStorage.getItem('browse'));
+            let goodsResult = {data:[]};
+            if(browse && browse[0]){
+                params = { dataArr : browse };
+                goodsResult = await apiCall.get("/goods/any/getArrayOrdered", {params});                
+            }
+
+            //self
+            const selfResult = await apiCall.get(`/self/self`);
+            setData({'goods' : goodsResult.data, 'self' : selfResult.data});
+            setSelfHandler(selfResult.data); //----SELF CONTEXT SET----//
+
+            //order
+            params = { 'self' : true, 'colArr' : ['state','teamId'] };
+            const orderResult = await apiCall.get(`/order`, {params});
+            if(orderResult.data.result == 'success'){
+                const orderState = {};
+                for(let i of orderResult.data.data){
+                    if(!orderState.hasOwnProperty(i.state)) orderState[i.state] = 0;
+                    orderState[i.state]++;
+                }
+                setOrderState(orderState);
+            }
+        }catch(e){
+            setError(e);
+        }
+        setLoading(false);
+    }    
+
+    const logout = useCallback(() => {
+        localStorage.clear();
+        setSelfHandler(null); //----SELF CONTEXT DELETE----//
+        navigate('/Login', { replace : true });
+    }, []);
+
+    const profileUpdate = useCallback(() => {
+        navigate('/MyPage/ProfileUpdate');
+    }, [data]);
+
+    const addressUpdate = useCallback(() => {
+        navigate('/MyPage/AddressUpdate');
+    }, [data]);
+
+    const paymentUpdate = useCallback(() => {
+        navigate('/MyPage/PaymentUpdate');
+    }, [data]);    
+
+    const settings = useCallback(() => {
+        navigate('/MyPage/Settings');
+    }, [data]);        
+
+    //effect
+    useEffect(() => {
+        initData();
+    }, []);
+
+    useEffect(() => {
+        if(data && orderState) touchSlide('mypageTouch', 'y');
+    }, [data, orderState]);    
+
+    //memo
+    const profileGear = useMemo(() => {
+        return !data ? null :(
+            <StyledProfile>
+                <StyledProfile1>
+                    <StyledProfileImageBox>
+                        <StyledProfileImage src={data.self.img} />
+                    </StyledProfileImageBox>
+                    <StyledProfileInfo>
+                        <StyledProfileName>
+                        {data.self.name}
+                        </StyledProfileName>
+                        {
+                            data.self.point > 0 ? (
+                                <StyledProfilePoint>
+                                    Point <StyledProfilePointNumber>{priceForm(data.self.point, true)}</StyledProfilePointNumber>원&nbsp;&nbsp;<QuestionIcon content={<PointInfo />}/>
+                                </StyledProfilePoint>                            
+                            ) : null
+                        }
+                    </StyledProfileInfo>
+                    <StyledProfileText onClick={profileUpdate}>프로필 수정<IoIosArrowForward /></StyledProfileText>
+                </StyledProfile1>
+                <StyledProfile2>
+                    <StyledProfileButton onClick={addressUpdate}>배송지 관리</StyledProfileButton>
+                    <StyledProfileButton onClick={paymentUpdate}>결제 수단</StyledProfileButton>
+                </StyledProfile2>
+            </StyledProfile>
+        )
+    }, [data]);
+
+    const inviteGear = useMemo(() => {
+        if(!data) return;
+        return (
+            <StyledInvite>
+                <InviteGuest id={data.self?.id}/>
+            </StyledInvite>
+        )
+    }, [data]);
+
+    const goodsGear = useMemo(() => {
+        return !data ? null :(
+            <StyledGoods>
+                <StyledGoodsTitle>내가 조회한 상품</StyledGoodsTitle>
+                {
+                    data.goods.length ? (
+                        <StyledGoodsSlide>
+                            <GoodsSwiper goodsBox={data.goods}/>
+                        </StyledGoodsSlide>
+                    ) : (
+                        <StyledZeroBrowse>
+                            상품 조회 기록이 없습니다.
+                        </StyledZeroBrowse>
+                    )
+                }
+            </StyledGoods>            
+        )
+    }, [data])
+
+    const orderGear = useMemo(() => {
+        return !orderState ? null : (
+            <StyledOrder>
+                <StyledOrderTitle>내 주문 현황</StyledOrderTitle>
+                <StyledOrderProcess onClick={() => navigate('/MyPage/OrderInfo', { state: { orderState: 2 } })}>
+                    <StyledOrderIcon>
+                        { !orderState[2] ? null : <StyledOrderCnt>{orderState[2]}</StyledOrderCnt> }
+                        <RiTeamLine/>
+                    </StyledOrderIcon>
+                    <StyledOrderText>팀모집중</StyledOrderText>                        
+                </StyledOrderProcess>
+                <StyledOrderProcess onClick={() => navigate('/MyPage/OrderInfo', { state: { orderState: 3 } })}>
+                    <StyledOrderIcon>
+                        { !orderState[3] && !orderState[11] && !orderState[12] && !orderState[41]  
+                            ? null 
+                            : <StyledOrderCnt>
+                                {(orderState[3] || 0) + (orderState[11] || 0) + (orderState[12] || 0) + (orderState[41] || 0)}
+                            </StyledOrderCnt> }
+                        <FiPackage/>
+                    </StyledOrderIcon>
+                    <StyledOrderText>상품준비중</StyledOrderText>
+                </StyledOrderProcess>
+                <StyledOrderProcess onClick={() => navigate('/MyPage/OrderInfo', { state: { orderState: 13 } })}>
+                    <StyledOrderIcon>
+                        { !orderState[13] ? null : <StyledOrderCnt>{orderState[13]}</StyledOrderCnt> }
+                        <MdOutlineLocalShipping/>
+                    </StyledOrderIcon>
+                    <StyledOrderText>배송중</StyledOrderText>
+                </StyledOrderProcess>
+                <StyledOrderProcess onClick={() => navigate('/MyPage/OrderInfo', { state: { orderState: 14 } })}>
+                    <StyledOrderIcon>
+                        { !orderState[14] ? null : <StyledOrderCnt highlight="none">{orderState[14]}</StyledOrderCnt> }
+                        <RiUserReceived2Line/>
+                    </StyledOrderIcon>                        
+                    <StyledOrderText>배송완료</StyledOrderText>                        
+                </StyledOrderProcess>
+                <StyledOrderProcess onClick={() => navigate('/MyPage/CancelList')}>
+                    <StyledOrderIcon>
+                        { 
+                            !orderState[21] && //교환신청
+                            !orderState[22] && //교환접수
+                            !orderState[23] && //교환회수단계
+                            !orderState[26] && //교환보류
+                            !orderState[27] && //교환발송단계
+                            !orderState[29] && //교환완료
+                            !orderState[31] && //반품신청
+                            !orderState[32] && //반품접수
+                            !orderState[33] && //반품회수단계
+                            !orderState[36] && //반품보류
+                            !orderState[37] && //반품완료
+                            !orderState[42] //취소완료
+                            ?  
+                            null 
+                            : <StyledOrderCnt highlight="none">
+                                {
+                                    Number(orderState[21] || 0)
+                                    +Number(orderState[22] || 0)
+                                    +Number(orderState[23] || 0)
+                                    +Number(orderState[26] || 0)
+                                    +Number(orderState[27] || 0)
+                                    +Number(orderState[29] || 0)
+                                    +Number(orderState[31] || 0)
+                                    +Number(orderState[32] || 0)
+                                    +Number(orderState[33] || 0)
+                                    +Number(orderState[36] || 0)
+                                    +Number(orderState[37] || 0)
+                                    +Number(orderState[42] || 0)
+                                }
+                            </StyledOrderCnt> 
+                        }
+                        <BiConversation/>
+                    </StyledOrderIcon>                        
+                    <StyledOrderText>취소/교환/환불</StyledOrderText>                        
+                </StyledOrderProcess>
+            </StyledOrder>
+        )
+    }, [orderState]);
+
+    //render
+    if(!data || !orderState) return <StyledSimpleLoading />
+    return (
+        <>
+        <SimpleMotion>
+        <StyledContainer id="mypageTouch">
+            <StyledHeader>
+                <StyledHeaderName>내 정보</StyledHeaderName>
+                <StyledHeaderIcon><BsGear onClick={settings}/></StyledHeaderIcon>
+            </StyledHeader>
+            <StyledContent>
+                {profileGear}
+                {inviteGear}
+                {orderGear}
+                {goodsGear}
+                <StyledEtc>
+                    <StyledEtcArea onClick={() => navigate('/MyPage/CustomerService')}>
+                        <StyledEtcIcon><RiCustomerService2Line /></StyledEtcIcon>
+                        <StyledEtcText>고객 센터 (평일 10:00 ~ 17:00)</StyledEtcText>
+                    </StyledEtcArea>
+                    <StyledEtcArea onClick={() => navigate('/MyPage/MyReview')}>
+                        <StyledEtcIcon><MdOutlineRateReview /></StyledEtcIcon>
+                        <StyledEtcText>구매 후기</StyledEtcText>
+                    </StyledEtcArea>
+                    <StyledEtcArea onClick={() => navigate('/MyPage/MyCatch')}>
+                        <StyledEtcIcon><RiPhoneFindLine /></StyledEtcIcon>
+                        <StyledEtcText>조회 내역</StyledEtcText>
+                    </StyledEtcArea>
+                    <StyledEtcArea onClick={() => navigate('/MyPage/MyQa', { state: { memberId: data.self.id } })}>
+                        <StyledEtcIcon><RiQuestionMark /></StyledEtcIcon>
+                        <StyledEtcText>문의 내역</StyledEtcText>
+                    </StyledEtcArea>
+                    <StyledEtcArea onClick={() => navigate('/MyPage/MyWish')}>
+                        <StyledEtcIcon><IoIosHeartEmpty /></StyledEtcIcon>
+                        <StyledEtcText>찜한 상품</StyledEtcText>
+                    </StyledEtcArea>
+                    <StyledEtcArea onClick = {() => setLogoutConfirm(true)}>
+                        <StyledEtcIcon><IoMdClose /></StyledEtcIcon>
+                        <StyledEtcText>로그아웃</StyledEtcText>
+                    </StyledEtcArea>                    
+                </StyledEtc>
+            </StyledContent>
+            <StyledFooter>
+                법인명 : {base.companyName} <br/>
+                대표자 : {base.companyOwner} <br/>
+                사업자 등록번호 : {base.saupjaNo} <br/>
+                통신판매업 신고번호 : {base.tolsinNo} <br/>
+                주소 : {base.companyAddr} <br/>
+                이메일 : {base.companyEmail} <br/>
+                Copyright©{base.shopId} Corp.All right reserved.<br />
+                <br />
+                <br />
+                <br />
+            </StyledFooter>
+        </StyledContainer>
+        </SimpleMotion>
+        <Modal 
+            option={{
+                width : "70%", 
+                height : "8em", 
+                textAlign : "center",
+                alignContent : "center",  
+                fontSize : "1em", 
+                buttonName : ["확인","취소"]
+            }} 
+            type={2}
+            proEvent = {() => {
+                logout();
+                return true;
+            }}
+            data={{desc : msgData['logoutConfirm']}}
+            state={logoutConfirm} 
+            closeEvent={() => setLogoutConfirm(false)}
+        />
+        </>
+    );    
+});
+
+export default MyPage;
 
 //------------------------------ CSS ----------------------------------------
 const StyledContainer = styled.div`
@@ -179,37 +480,6 @@ const StyledOrderText = styled.div`
     background:white;
     font-size:0.8em;
 `;
-/*
-const StyledEvent = styled.div`
-    display:grid;
-    background:white;
-    margin:1% 2%;
-    border: solid 1px #555;
-    grid-template-columns: 5fr 4fr;
-    padding:3%;
-`;
-const StyledEventText = styled.div`
-    display:grid;
-    justify-content:center;
-    margin:1%;
-    align-items:center;
-    font-size:1.1em;
-    font-weight:bold;
-    color:#555;
-`;
-const StyledEventButton = styled.div`
-    display:grid;
-    grid-template-columns: auto 1fr;
-    border: 1px solid #555;
-    border-radius:5px;
-    text-align:center;
-    margin:2%;
-    padding:5% 10%;
-    align-items:center;
-    font-size:0.8em;
-    color:#555;
-`;
-*/
 const StyledGoods = styled.div`
     border-bottom:solid 5px #eee;    
 `;
@@ -253,14 +523,6 @@ const StyledEtcText = styled.div`
     align-content:center;
     padding:0 2%;
 `;
-const StyledLogout = styled.div`
-    display:grid;
-    justify-content:start;
-    padding:3% 2%;
-    background:white;
-    font-size:0.8em;
-    color:#aaa;
-`;
 const StyledFooter = styled.div`
     background:#eee;
     text-align:start;
@@ -275,341 +537,6 @@ const StyledSimpleLoading = styled.div`
     position:fixed;
     background:white;
 `;
-//------------------------------ COMPONENT ----------------------------------
-const MyPage = React.memo(() => {
-    //init
-    const navigate = useNavigate();
-
-    //context
-    const { base } = useContext(BaseContext);
-    const { setSelfHandler } = useContext(SelfContext);
-
-    //state
-    const [loading, setLoading] = useState(true);
-    const [error, setError] = useState(null);
-    const [data, setData] = useState(null);
-    const [orderState, setOrderState] = useState(null);
-    const [logoutConfirm, setLogoutConfirm] = useState(false);
-    
-    //function
-    const initData = async() => {
-        try {
-            setError(null);
-            setLoading(true);
-            setData(null);
-            let params;
-
-            //goods
-            const browse = JSON.parse(sessionStorage.getItem('browse'));
-            let goodsResult = {data:[]};
-            if(browse && browse[0]){
-                params = { dataArr : browse };
-                goodsResult = await apiCall.get("/goods/any/getArrayOrdered", {params});                
-            }
-
-            //self
-            const selfResult = await apiCall.get(`/self/self`);
-            setData({'goods' : goodsResult.data, 'self' : selfResult.data});
-            setSelfHandler(selfResult.data); //----SELF CONTEXT SET----//
-
-            //order
-            params = { 'self' : true, 'colArr' : ['state','teamId'] };
-            const orderResult = await apiCall.get(`/order`, {params});
-            if(orderResult.data.result == 'success'){
-                const orderState = {};
-                for(let i of orderResult.data.data){
-                    if(!orderState.hasOwnProperty(i.state)) orderState[i.state] = 0;
-                    orderState[i.state]++;
-                }
-                setOrderState(orderState);
-            }
-        }catch(e){
-            setError(e);
-        }
-        setLoading(false);
-    }    
-
-    const logout = useCallback(() => {
-        localStorage.clear();
-        setSelfHandler(null); //----SELF CONTEXT DELETE----//
-        navigate('/Login', { replace : true });
-    }, []);
-
-    const profileUpdate = useCallback(() => {
-        navigate('/MyPage/ProfileUpdate');
-    }, [data]);
-
-    const addressUpdate = useCallback(() => {
-        navigate('/MyPage/AddressUpdate');
-    }, [data]);
-
-    const paymentUpdate = useCallback(() => {
-        navigate('/MyPage/PaymentUpdate');
-    }, [data]);    
-
-    const settings = useCallback(() => {
-        navigate('/MyPage/Settings');
-    }, [data]);        
-
-    //effect
-    useEffect(() => {
-        initData();
-    }, []);
-
-    useEffect(() => {
-        if(data && orderState) touchSlide('mypageTouch', 'y');
-    }, [data, orderState]);    
-
-    //memo
-    const profileGear = useMemo(() => {
-        return !data ? null :(
-            <StyledProfile>
-                <StyledProfile1>
-                    <StyledProfileImageBox>
-                        <StyledProfileImage src={data.self.img} />
-                    </StyledProfileImageBox>
-                    <StyledProfileInfo>
-                        <StyledProfileName>
-                        {data.self.name}
-                        </StyledProfileName>
-                        {
-                            data.self.point > 0 ? (
-                                <StyledProfilePoint>
-                                    Point <StyledProfilePointNumber>{priceForm(data.self.point, true)}</StyledProfilePointNumber>원&nbsp;&nbsp;<QuestionIcon content={<PointInfo />}/>
-                                </StyledProfilePoint>                            
-                            ) : null
-                        }
-                    </StyledProfileInfo>
-                    <StyledProfileText onClick={profileUpdate}>프로필 수정<IoIosArrowForward /></StyledProfileText>
-                </StyledProfile1>
-                <StyledProfile2>
-                    <StyledProfileButton onClick={addressUpdate}>배송지 관리</StyledProfileButton>
-                    <StyledProfileButton onClick={paymentUpdate}>결제 수단</StyledProfileButton>
-                </StyledProfile2>
-            </StyledProfile>
-        )
-    }, [data]);
-
-    const goodsGear = useMemo(() => {
-        return !data ? null :(
-            <StyledGoods>
-                <StyledGoodsTitle>내가 조회한 상품</StyledGoodsTitle>
-                {
-                    data.goods.length ? (
-                        <StyledGoodsSlide>
-                            <GoodsSwiper goodsBox={data.goods}/>
-                        </StyledGoodsSlide>
-                    ) : (
-                        <StyledZeroBrowse>
-                            상품 조회 기록이 없습니다.
-                        </StyledZeroBrowse>
-                    )
-                }
-            </StyledGoods>            
-        )
-    }, [data])
-
-    const orderGear = useMemo(() => {
-        return !orderState ? null : (
-            <StyledOrder>
-                <StyledOrderTitle>내 주문 현황</StyledOrderTitle>
-                <StyledOrderProcess onClick={() => navigate('/MyPage/OrderInfo', { state: { orderState: 2 } })}>
-                    <StyledOrderIcon>
-                        { !orderState[2] ? null : <StyledOrderCnt>{orderState[2]}</StyledOrderCnt> }
-                        <RiTeamLine/>
-                    </StyledOrderIcon>
-                    <StyledOrderText>팀모집중</StyledOrderText>                        
-                </StyledOrderProcess>
-                <StyledOrderProcess onClick={() => navigate('/MyPage/OrderInfo', { state: { orderState: 3 } })}>
-                    <StyledOrderIcon>
-                        { !orderState[3] && !orderState[11] && !orderState[12] && !orderState[41]  
-                            ? null 
-                            : <StyledOrderCnt>
-                                {(orderState[3] || 0) + (orderState[11] || 0) + (orderState[12] || 0) + (orderState[41] || 0)}
-                            </StyledOrderCnt> }
-                        <FiPackage/>
-                    </StyledOrderIcon>
-                    <StyledOrderText>상품준비중</StyledOrderText>
-                </StyledOrderProcess>
-                <StyledOrderProcess onClick={() => navigate('/MyPage/OrderInfo', { state: { orderState: 13 } })}>
-                    <StyledOrderIcon>
-                        { !orderState[13] ? null : <StyledOrderCnt>{orderState[13]}</StyledOrderCnt> }
-                        <MdOutlineLocalShipping/>
-                    </StyledOrderIcon>
-                    <StyledOrderText>배송중</StyledOrderText>
-                </StyledOrderProcess>
-                <StyledOrderProcess onClick={() => navigate('/MyPage/OrderInfo', { state: { orderState: 14 } })}>
-                    <StyledOrderIcon>
-                        { !orderState[14] ? null : <StyledOrderCnt highlight="none">{orderState[14]}</StyledOrderCnt> }
-                        <RiUserReceived2Line/>
-                    </StyledOrderIcon>                        
-                    <StyledOrderText>배송완료</StyledOrderText>                        
-                </StyledOrderProcess>
-                <StyledOrderProcess onClick={() => navigate('/MyPage/CancelList')}>
-                    <StyledOrderIcon>
-                        { 
-                            !orderState[21] && //교환신청
-                            !orderState[22] && //교환접수
-                            !orderState[23] && //교환회수단계
-                            !orderState[26] && //교환보류
-                            !orderState[27] && //교환발송단계
-                            !orderState[29] && //교환완료
-                            !orderState[31] && //반품신청
-                            !orderState[32] && //반품접수
-                            !orderState[33] && //반품회수단계
-                            !orderState[36] && //반품보류
-                            !orderState[37] && //반품완료
-                            !orderState[42] //취소완료
-                            ?  
-                            null 
-                            : <StyledOrderCnt highlight="none">
-                                {
-                                    Number(orderState[21] || 0)
-                                    +Number(orderState[22] || 0)
-                                    +Number(orderState[23] || 0)
-                                    +Number(orderState[26] || 0)
-                                    +Number(orderState[27] || 0)
-                                    +Number(orderState[29] || 0)
-                                    +Number(orderState[31] || 0)
-                                    +Number(orderState[32] || 0)
-                                    +Number(orderState[33] || 0)
-                                    +Number(orderState[36] || 0)
-                                    +Number(orderState[37] || 0)
-                                    +Number(orderState[42] || 0)
-                                }
-                            </StyledOrderCnt> 
-                        }
-                        <BiConversation/>
-                    </StyledOrderIcon>                        
-                    <StyledOrderText>취소/교환/환불</StyledOrderText>                        
-                </StyledOrderProcess>
-            </StyledOrder>
-        )
-    }, [orderState]);
-
-    const eventGear = useMemo(() => {
-        return null;
-        /*
-        return(
-            <>
-            <StyledEvent>
-                <StyledEventText>지금 바로! 타임특가!</StyledEventText>
-                <StyledEventButton>타임딜 바로가기<IoIosArrowForward size="1.5em"/></StyledEventButton>
-            </StyledEvent>
-            <StyledEvent>
-                <StyledEventText>출첵하고 포인트 받기!</StyledEventText>
-                <StyledEventButton>출석체크 바로가기<IoIosArrowForward size="1.5em"/></StyledEventButton>                    
-            </StyledEvent>            
-            </>
-        )
-        */
-    }, []);
-
-    //render
-    if(!data || !orderState) return <StyledSimpleLoading />
-    return (
-        <>
-        <SimpleMotion>
-        <StyledContainer id="mypageTouch">
-            <StyledHeader>
-                <StyledHeaderName>내 정보</StyledHeaderName>
-                <StyledHeaderIcon><BsGear onClick={settings}/></StyledHeaderIcon>
-            </StyledHeader>
-            <StyledContent>
-                {profileGear}
-                {orderGear}
-                {eventGear}
-                {goodsGear}
-                {
-                    /*
-                    <StyledEtc>
-                        <StyledEtcArea>
-                            <StyledEtcIcon><BsPeopleFill color="red"/></StyledEtcIcon>
-                            <StyledEtcText>내 친구</StyledEtcText>
-                        </StyledEtcArea>
-                        <StyledEtcArea>
-                            <StyledEtcIcon><RiCoupon3Fill color="red" /></StyledEtcIcon>
-                            <StyledEtcText>쿠폰함</StyledEtcText>                    
-                        </StyledEtcArea>
-                    </StyledEtc>
-                    */
-                }
-                <StyledEtc>
-                    <StyledEtcArea onClick={() => navigate('/MyPage/CustomerService')}>
-                        <StyledEtcIcon><RiCustomerService2Line /></StyledEtcIcon>
-                        <StyledEtcText>고객 센터 (평일 10:00 ~ 17:00)</StyledEtcText>
-                    </StyledEtcArea>
-                    <StyledEtcArea onClick={() => navigate('/MyPage/MyReview')}>
-                        <StyledEtcIcon><MdOutlineRateReview /></StyledEtcIcon>
-                        <StyledEtcText>구매 후기</StyledEtcText>
-                    </StyledEtcArea>
-                    <StyledEtcArea onClick={() => navigate('/MyPage/MyCatch')}>
-                        <StyledEtcIcon><RiPhoneFindLine /></StyledEtcIcon>
-                        <StyledEtcText>조회 내역</StyledEtcText>
-                    </StyledEtcArea>
-                    <StyledEtcArea onClick={() => navigate('/MyPage/MyQa', { state: { memberId: data.self.id } })}>
-                        <StyledEtcIcon><RiQuestionMark /></StyledEtcIcon>
-                        <StyledEtcText>문의 내역</StyledEtcText>
-                    </StyledEtcArea>
-                    <StyledEtcArea onClick={() => navigate('/MyPage/MyWish')}>
-                        <StyledEtcIcon><IoIosHeartEmpty /></StyledEtcIcon>
-                        <StyledEtcText>찜한 상품</StyledEtcText>
-                    </StyledEtcArea>
-                    <StyledEtcArea onClick = {() => setLogoutConfirm(true)}>
-                        <StyledEtcIcon><IoMdClose /></StyledEtcIcon>
-                        <StyledEtcText>로그아웃</StyledEtcText>
-                    </StyledEtcArea>                    
-                    {
-                        /*
-                        <StyledEtcArea onClick={() => navigate('/MyPage/CancelList')}>
-                            <StyledEtcIcon><RiDeleteBack2Line /></StyledEtcIcon>
-                            <StyledEtcText>취소/교환/반품 내역</StyledEtcText>                                                                                                                       
-                        </StyledEtcArea>
-                        */
-                    }
-                </StyledEtc>
-                {
-                    /*
-                    <StyledLogout>
-                        <div onClick = {() => setLogoutConfirm(true)}>로그아웃</div>
-                    </StyledLogout>
-                    */
-                }
-            </StyledContent>
-            <StyledFooter>
-                법인명 : {base.companyName} <br/>
-                대표자 : {base.companyOwner} <br/>
-                사업자 등록번호 : {base.saupjaNo} <br/>
-                통신판매업 신고번호 : {base.tolsinNo} <br/>
-                주소 : {base.companyAddr} <br/>
-                이메일 : {base.companyEmail} <br/>
-                Copyright©{base.shopId} Corp.All right reserved.<br />
-                <br />
-                <br />
-                <br />
-            </StyledFooter>
-        </StyledContainer>
-        </SimpleMotion>
-        <Modal 
-            option={{
-                width : "70%", 
-                height : "8em", 
-                textAlign : "center",
-                alignContent : "center",  
-                fontSize : "1em", 
-                buttonName : ["확인","취소"]
-            }} 
-            type={2}
-            proEvent = {() => {
-                logout();
-                return true;
-            }}
-            data={{desc : msgData['logoutConfirm']}}
-            state={logoutConfirm} 
-            closeEvent={() => setLogoutConfirm(false)}
-        />
-        </>
-    );    
-});
-
-export default MyPage;
+const StyledInvite = styled.div`
+    padding:5% 3%;
+`;

@@ -136,7 +136,6 @@ const AddressAdd = () => {
     const etc = useRef();
 
     //state
-    const [data, setData] = useState(null);    
     const [phase1, setPhase1] = useState(false);
     const [phase2, setPhase2] = useState(false);
     const [postModal, setPostModal] = useState(false);
@@ -235,7 +234,6 @@ const AddressAdd = () => {
             <StyledWhere1>
                 <StyledTitle>우편 번호</StyledTitle>
                 <StyledSubmit onClick = {() => setPostModal(true)}>우편번호 검색하기</StyledSubmit>
-                {/*<StyledSubtitle onCLick = {() => setPhase1(true)}>우편번호 검색이 안되나요? 직접 검색하기</StyledSubtitle> */}
             </StyledWhere1>
         ) : null;
     }, [phase1]);

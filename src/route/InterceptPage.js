@@ -1,8 +1,6 @@
 //------------------------------ MODULE -------------------------------------
-import React, { useEffect, useContext } from "react";
+import React, { useEffect } from "react";
 import { useLocation, useSearchParams, useNavigate } from "react-router-dom";
-
-//------------------------------ CSS ----------------------------------------
 
 //------------------------------ COMPONENT ----------------------------------
 const InterceptPage = React.memo(() => {

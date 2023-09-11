@@ -263,7 +263,6 @@ const ProfileUpdate = () => {
                     <input style={{ display:"none" }} ref={imgInput} type='file' accept='image/*' onChange={ (e) => setImgName(e.target.files[0]) } />
                     {imgName ? 
                         <>
-                        {/*<StyledHorizontal>이미지를 중심에 맞춰 조정 해 주세요.</StyledHorizontal> */}
                         <AvatarEditor
                             ref={editor}
                             image={imgName}

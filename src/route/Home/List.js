@@ -11,11 +11,9 @@ const StyledList = styled.div`
 const List = React.memo(({categoryId, rows=8}) => { 
     //render
     return (
-        <>
         <StyledList>
             <ItemList category={categoryId}/>
         </StyledList>
-        </>
     );
 });
 

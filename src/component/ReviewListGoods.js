@@ -200,7 +200,6 @@ const ReviewListGoods = ({goodsId=null, limit=null, infiniteScroll=false, sendCn
                                     }
                                 </StyledStarListImgBox>
                             </StyledStarListImgContainer>
-                            {/*<StyledStarListContentText value={item.content} imgChk={item.reviewImg} readOnly /> */}
                             <StyledStarListContentP ref={infiniteScroll && index==data.length-1 ? lastItemElementRef : null}>{String(item.content)}</StyledStarListContentP>
                         </StyledStarListContent>
                     </StyledStarListRow>

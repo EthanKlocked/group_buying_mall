@@ -7,7 +7,6 @@ import { BsStarFill } from "react-icons/bs";
 import { useNavigate } from "react-router-dom";
 
 //------------------------------ CSS ----------------------------------------
-
 const StyledReview = styled.div`
     width:100%;
     padding-bottom:10em;
@@ -107,7 +106,6 @@ const StyledGoodsCnt = styled.div`
 const StyledReviewInfo = styled.div`
 `;
 const StyledReviewInfoStar = styled.div`
-
 `;
 const StyledReviewInfoImg = styled.div`
     text-align:start;

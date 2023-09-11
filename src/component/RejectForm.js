@@ -60,12 +60,6 @@ const StyledSemiSubtitle = styled.span`
     font-size:0.5em;
     color:crimson;
 `;
-const StyledSelect = styled.select`
-    width:100%;
-    padding:0.5em;
-    border-radius:0.3em;
-    webkit
-`;
 const StyledTextarea = styled.textarea`
     width:100%;
     height:6em;
@@ -169,7 +163,6 @@ const RejectForm = React.memo(({dt, selfHandler, resultHandler}) => {
                     </StyledInfo>
                 </StyledContent>
             </StyledSection>
-
             <StyledSection>
                 <StyledSemiTitle>
                     반품/교환
@@ -185,7 +178,6 @@ const RejectForm = React.memo(({dt, selfHandler, resultHandler}) => {
                     </StyledRadioSet>
                 </StyledRadioInfo>
             </StyledSection>
-
             <StyledSection>
                 <StyledSemiTitle>
                     상세 사유 입력
@@ -193,7 +185,6 @@ const RejectForm = React.memo(({dt, selfHandler, resultHandler}) => {
                 </StyledSemiTitle>  
                 <StyledTextarea onChange={(e) => setText(e.target.value)} placeholder="교환 및 반품 사유를 작성 해 주세요."></StyledTextarea>
             </StyledSection>
-
             <StyledSubmit onClick={send}>신청하기</StyledSubmit>
         </StyledRejectForm>
     );

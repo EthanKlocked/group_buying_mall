@@ -8,7 +8,6 @@ import { CgSelect } from "react-icons/cg";
 const StyledCgSelect = styled(CgSelect)`
     color:crimson;
     vertical-align:text-bottom;
-
 `;
 
 //------------------------------ COMPONENT ----------------------------------

@@ -3,8 +3,7 @@ import React, { useState, useEffect } from 'react';
 import styled from "styled-components";
 
 //------------------------------ CSS ----------------------------------------
-const StyledInput = styled.input`
-`;
+const StyledInput = styled.input``;
 
 //------------------------------ COMPONENT ----------------------------------
 const PriceInput = React.memo(({changeHandler = null, max = null}) => {

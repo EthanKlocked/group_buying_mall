@@ -62,27 +62,6 @@ const AutoTimer = forwardRef(({type="m", timeSet, expireEvent = () => {}}, ref) 
         {hoursGear}
         {minutesGear}
         {secondsGear}
-        {
-            /*
-                <div style={{textAlign: 'center'}}>
-                    <h1>react-timer-hook </h1>
-                    <p>Timer Demo</p>
-                    <div style={{fontSize: '5px'}}>
-                        <span>{days}</span>:<span>{hours}</span>:<span>{minutes}</span>:<span>{seconds}</span>
-                    </div>
-                    <p>{isRunning ? 'Running' : 'Not running'}</p>
-                    <button onClick={start}>Start</button>
-                    <button onClick={pause}>Pause</button>
-                    <button onClick={resume}>Resume</button>
-                    <button onClick={() => {
-                        // Restarts to 5 minutes timer
-                        const time = new Date();
-                        time.setSeconds(time.getSeconds() + 300);
-                        restart(time)
-                    }}>Restart</button>
-                </div>            
-            */
-        }
         </StyledAutoTimer>
     );     
 });

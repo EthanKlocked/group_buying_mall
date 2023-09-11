@@ -14,3 +14,4 @@ export { default as touchSlide } from "./touchSlide";
 export { default as cleanEvent } from "./cleanEvent";
 export { default as useDidMountEffect } from "./useDidMountEffect";
 export { default as cripto } from "./cripto";
+export { default as makeInvitation } from "./makeInvitation";

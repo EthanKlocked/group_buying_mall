@@ -219,10 +219,6 @@ const PaymentUpdate = () => {
             }
             const headers = {'Content-Type' : 'application/x-www-form-urlencoded; charset=UTF-8'};
             const result = await apiCall.put("/self", {params}, {headers});    
-            if(result.data == '000'){
-                //const updateData = await apiCall.get(`/self/self`);
-                //setSelfHandler(updateData.data); //----SELF CONTEXT UPDATE----//
-            } 
             navigate(-1);
         }catch(e){
             setError(e);

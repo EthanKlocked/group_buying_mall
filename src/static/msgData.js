@@ -80,6 +80,7 @@ const msgData = {
     error : "오류가 발생하였습니다.",
 
     onlySongpa : "현재는 서울시 송파구 내 주소지만 배송지 등록이 가능합니다.",
+    attendAlready : "오늘은 이미 출석체크를 완료하셨습니다.",
 }     
 
 export default msgData;

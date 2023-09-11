@@ -1,6 +1,6 @@
 //------------------------------ MODULE -------------------------------------
 import React, { useContext, useRef, useCallback, useEffect, useMemo } from 'react'
-import { Link, useNavigate, useLocation } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import styled from "styled-components";
 import { elementScrollIntoView, scrollTo } from 'seamless-scroll-polyfill';
 import { BaseContext } from "context";
@@ -60,8 +60,7 @@ const Menu = React.memo(() => {
     const itemTopReset = (refreshChk) => { //scroll move to top when menu changed
         const upstreamTarget = document.getElementById(`upstreamTarget`);
         if(refreshChk){ //same menu
-            scrollTo(upstreamTarget,{behavior: "smooth", top: 0, left: 0})
-            //elementScrollIntoView(upstreamTarget, {behavior: "smooth", block: "end", inline: "center"});  
+            scrollTo(upstreamTarget,{behavior: "smooth", top: 0, left: 0});
         }else{ //different menu
             upstreamTarget.style.overflowY = 'hidden';
             upstreamTarget.scrollTop = 0;
@@ -86,11 +85,6 @@ const Menu = React.memo(() => {
                     onClick={executeScroll}
                     ref={ pathname.endsWith(item[0]=='all'? 'Main' : `List${index}`)?menuRef:null}
                 >
-                    {/*
-                        <Link to={item[0]=='all'? 'Main' : `List${index}`} onClick={itemTopReset}>
-                            {item[0]=='all'? '추천': item[1].info.title}
-                        </Link>
-                    */}
                     <span onClick={() => moveMenu(item[0]=='all'? 'Main' : `List${index}`)}>
                         {item[0]=='all'? '추천':(categoryData.hasOwnProperty(item[1].info.ctgId) ? categoryData[item[1].info.ctgId].name : item[1].info.title)}
                     </span>                        

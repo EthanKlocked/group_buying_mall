@@ -2,7 +2,7 @@
 import React, { useState, useEffect, useMemo, useRef, useContext } from 'react';
 import { AutoTimer, Modal, CustomLoading, RejectForm } from "component";
 import styled from "styled-components";
-import { apiCall, priceForm, nameCut, vnotiCall } from 'lib';
+import { apiCall, priceForm, nameCut } from 'lib';
 import { msgData } from "static";
 import { useNavigate } from "react-router-dom";
 import { BaseContext } from "context";
@@ -35,12 +35,6 @@ const StyledTimeLimit = styled.div`
     }
 `;
 const StyledTeamImgBox = styled.div`
-`;
-const StyledTeamIcon = styled.svg`
-    border-radius: 50%;
-    width:2.5em;
-    height:2.5em;
-    margin:0.3em;
 `;
 const StyledTeamImg = styled.span`
     display:inline-block;
@@ -225,26 +219,6 @@ const State1 = React.memo(({dt, confirmHandler, alertHandler}) => { // orderStat
                     const headers = {'Content-Type' : 'application/x-www-form-urlencoded; charset=UTF-8'};
                     params = { 'teamId' : teamId };
                     const breakResult = await apiCall.put("/team/after/break", {params}, {headers});
-
-                    /*
-                    //point payback
-                    const orderPoint = dt.point;
-                    const orderArr = dt.orderData;
-
-                    orderArr.forEach(async(i) => {
-                        let vPoint = 0;
-                        const eachUser = await apiCall.get(`/member/${i.userId}`);
-                        if(eachUser && eachUser.data.mb_sns_id_3){
-                            const vPointCancel = await vnotiCall.get(`/point/${eachUser.data.mb_sns_id_3}/cancel?od_id=${i.odNo}`);
-                            if(vPointCancel.data.result == "000") vPoint += Number(vPointCancel.data.cancel_point);
-                        }
-                        const payBackPoint = Number(i.point) - vPoint;
-                        if(payBackPoint > 0){
-                            params = { 'amount' : payBackPoint };
-                            const aPointCancel = await apiCall.get("/member/any/point", {params});                            
-                        }
-                    })
-                    */
                 } 
             }
         }
@@ -276,7 +250,6 @@ const State1 = React.memo(({dt, confirmHandler, alertHandler}) => { // orderStat
                         </>
                     )
                 }
-
             </StyledTeamBtnArea>
         )
     }, [time, cancelChk]);
@@ -366,15 +339,9 @@ const State2 = React.memo(({dt, confirmHandler}) => { // orderState 3, 11, 12, 4
 
         //render
         return(
-            <StyledOrderBtnArea>
-                {
-                    //cancelChk || dt.state == 41 ? <StyledCancelMessage>주문 취소신청이 접수되었습니다.</StyledCancelMessage> :
-                    <>
-                        <StyledOrderBtnNormal onClick={() => navigate('/MyPage/OrderDesc', { state: { orderId: dt.odId } })}>주문 상세</StyledOrderBtnNormal>
-                        {stateText}
-                    </>
-                }
-
+            <StyledOrderBtnArea>                    
+                <StyledOrderBtnNormal onClick={() => navigate('/MyPage/OrderDesc', { state: { orderId: dt.odId } })}>주문 상세</StyledOrderBtnNormal>
+                {stateText}
             </StyledOrderBtnArea>            
         )
     }, [cancelChk]);

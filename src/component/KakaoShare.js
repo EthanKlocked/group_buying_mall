@@ -4,25 +4,6 @@ import { RiKakaoTalkFill } from "react-icons/ri";
 import React, { useEffect, useMemo } from "react";
 import { kakaoShare } from "lib";
 
-//------------------------------ CSS ----------------------------------------
-const StyledDiv = styled.div`
-    position:fixed;
-    right: ${(props) => props.r};
-    bottom: ${(props) => props.b};
-    z-index:4;
-    text-align:center;
-    height:2em;
-    width:2em;
-    border-radius:50%;
-    background:#f9e000;
-    margin-top:0.2em;
-    cursor:pointer;
-    svg{
-        margin-top:0.25em;
-        margin-left:0.05em;
-    }
-`;
-
 //------------------------------ COMPONENT ----------------------------------
 const KakaoShare = React.memo(({type="goods", sendData, b="4em", r="2.5em"}) => {
     //function
@@ -99,3 +80,22 @@ const KakaoShare = React.memo(({type="goods", sendData, b="4em", r="2.5em"}) => 
 });
 
 export default KakaoShare;
+
+//------------------------------ CSS ----------------------------------------
+const StyledDiv = styled.div`
+    position:fixed;
+    right: ${(props) => props.r};
+    bottom: ${(props) => props.b};
+    z-index:4;
+    text-align:center;
+    height:2em;
+    width:2em;
+    border-radius:50%;
+    background:#f9e000;
+    margin-top:0.2em;
+    cursor:pointer;
+    svg{
+        margin-top:0.25em;
+        margin-left:0.05em;
+    }
+`;

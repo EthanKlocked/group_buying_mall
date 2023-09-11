@@ -56,13 +56,9 @@ const Logo = React.memo(({ h = null, xPosition = 'center', type=1 }) => {
     //render
     return (
         <>
-            {/*<Link to={"/"}><StyledLogo src={logoImg} height={h}/></Link>*/}
-            {/*<Link to={"/"}><StyledLogo src={`${process.env.REACT_APP_SERVER_URL}/${base.logo}`} height={h}/></Link>*/}
-            {
-                <StyledLogoBox onClick={moveToHome} xPosition={xPosition}>
-                    {pathname == "/Home/Search" ? <StyledBack height={h}/> : <StyledLogo src={`${process.env.REACT_APP_SERVER_URL}/${type == 1 ? base.logo : base.mLogo}`} height={h}/>}
-                </StyledLogoBox>
-            }
+            <StyledLogoBox onClick={moveToHome} xPosition={xPosition}>
+                {pathname == "/Home/Search" ? <StyledBack height={h}/> : <StyledLogo src={`${process.env.REACT_APP_SERVER_URL}/${type == 1 ? base.logo : base.mLogo}`} height={h}/>}
+            </StyledLogoBox>
         </>
     );     
 });

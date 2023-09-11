@@ -63,12 +63,6 @@ const StyledGoodsContentBox = styled.span`
         text-align:start;
     }
 `;
-const StyledGoodsDate = styled.div`
-    font-size:1em;
-    padding-bottom:0.3em;
-    border-bottom:0.05em solid #eee;
-    margin-bottom:0.3em;
-`;
 const StyledGoodsName = styled.div`
     font-size:0.8em;
     font-weight:550;

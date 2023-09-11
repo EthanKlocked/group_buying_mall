@@ -449,51 +449,6 @@ const Order = () => {
             }
             const payResult = await apiCall.get(`/billing/${defaultCard.id}/pay`, {params});        
             if(payResult.data == 'success'){ //pay Success
-
-                /***************** POINT CHECK *******************/
-                /* CASE INDEPENDENT POINT USE (doesn't need when point controlled by server side logic)
-                //POINT CONTROLL
-                let alldealPointChk = 'try';
-                let vnotiPointChk = 'try';
-
-                //alldeal point try
-                if(Number(point) > 0){
-                    params = { 'amount' : -Number(point) };
-                    const aPointUse = await apiCall.get("/member/any/point", {params});
-                    alldealPointChk = (aPointUse.data == "success") ? 'ok' : 'fail';
-                }
-
-                //vnoti point try
-                if(vid && Number(vpoint) > 0){
-                    const vPointUse = await vnotiCall.get(`/point/${vid}/order?od_id=${orderResult.data.orderNum}&use_point=${vpoint}`);
-                    vnotiPointChk = (vPointUse.data.result == "000") ? 'ok' : 'fail';
-                }
-
-                //point failed
-                if(alldealPointChk =='fail' || vnotiPointChk == 'fail'){
-                    payChk = false;
-                    //order status reset process
-                    params = { 
-                        'orderNum' : orderResult.data.orderNum,
-                        'orderStatus' : '1', // 2 -> 1
-                        'teamId' : 'reset',
-                    }
-                    const orderUpdateResult = await apiCall.put("/order", {params}, {headers}); //orderCancel
-
-                    //payback
-                    params.reason = '포인트 사용 오류';
-                    const cancelResult = await apiCall.get("/billing/payback/cancel", {params}); //billingCancel                        
-
-                    if(alldealPointChk == 'ok'){ //case alldeal used vnoti failed
-                        params = { 'amount' : Number(point) };
-                        const aPointCancel = await apiCall.get("/member/any/point", {params});
-                    }
-
-                    if(vnotiPointChk == 'ok'){ //case alldeal failed vnoti used
-                        const vPointCancel = await vnotiCall.get(`/point/${vid}/cancel?od_id=${orderResult.data.orderNum}`);
-                    }                        
-                }else{ //point Success
-                */
                     /***************** TEAM UPDATE *******************/
                     params = { 'teamId' : teamId }
                     const teamUpdateResult = await apiCall.put("/team", {params}, {headers}); //case 1 : ready -> set, case2 : set -> go(order state to 3)
@@ -509,22 +464,10 @@ const Order = () => {
                         //payback
                         params.reason = '팀 생성 오류';
                         const cancelResult = await apiCall.get("/billing/payback/cancel", {params}); //billingCancel
-
-                        /* CASE INDEPENDENT POINT USE
-                        if(alldealPointChk == 'ok'){ //case alldeal used vnoti failed
-                            params = { 'amount' : Number(point) };
-                            const aPointCancel = await apiCall.get("/member/any/point", {params});
-                        }
-    
-                        if(vnotiPointChk == 'ok'){ //case alldeal failed vnoti used
-                            const vPointCancel = await vnotiCall.get(`/point/${vid}/cancel?od_id=${orderResult.data.orderNum}`);
-                        }
-                        */
                         payChk = false;
                     }else{
                         payChk = true;                    
                     }
-                //}
             }else{
                 //order status reset process
                 params = { 
@@ -533,18 +476,6 @@ const Order = () => {
                     'teamId' : 'reset',
                 }
                 const orderUpdateResult = await apiCall.put("/order", {params}, {headers}); //orderCancel
-
-                /*
-                if(payResult.data != 'networkErr'){ //order update failed => payback
-                    //payback
-                    params = { 
-                        'orderNum' : orderResult.data.orderNum,
-                        'reason' : '결제 오류',
-                    }
-                    const cancelResult = await apiCall.get("/billing/payback/cancel", {params});
-                    console.log(cancelResult.data);
-                }
-                */
                 payChk = false;
             }
         } 
@@ -670,8 +601,6 @@ const Order = () => {
         const minPoint = base.minPoint || base.default.minPoint;
         const maxPoint = base.maxPoint || base.default.maxPoint;
         const goodsTotal = (order.set.goods.goodsPrice + order.set.option.addPrice);
-        //const realMax = Math.min(self.point, maxPoint, (count * (deliveryFee + goodsTotal))/10-vpoint);
-        //const realMaxV = Math.min(vpointAble, maxPoint, (count * (deliveryFee + goodsTotal))/10-point);
         const realMax = Math.min(self.point, (count * (deliveryFee + goodsTotal)) * maxPoint/100 - vpoint);
         const realMaxV = Math.min(vpointAble, (count * (deliveryFee + goodsTotal)) * maxPoint/100 - point);        
 
@@ -693,7 +622,7 @@ const Order = () => {
                 {
                     base.pointYn=='y' ? ( // the shop should use point option
                     <>
-                        <StyledOrderPoint pointYn={ pointAbleChk } style={{'display':'none'}}>
+                        <StyledOrderPoint pointYn={ pointAbleChk }>
                             <StyledOrderPriceTitle>포인트 <QuestionIcon content={<PointInfo/>}/></StyledOrderPriceTitle>
                             <StyledOrderPriceInfo>
                                 <span style={{fontSize:'0.9em',fontWeight:'normal'}}>{pointAbleChk ? <>사용가능</>:null} {self.point.toLocaleString()}원</span>

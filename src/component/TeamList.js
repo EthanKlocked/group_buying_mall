@@ -199,7 +199,6 @@ const TeamList = React.memo(({limit, alertHandler}) => {
         return data.length ? (            
             data.map((item, index) => (
                 <StyledItemInfo key={index} lenChk={data.length-1 == index} onClick = {() => moveDesc(item)}>
-                    {/*<StyledGoodsInfo onClick = {() => navigate('/Description', { state: { id: item.goods.goodsId } })}> */}
                     <StyledTeamInfo>
                         <StyledTeamImg>
                             <img src={`${process.env.REACT_APP_SERVER_URL}/${item.goods.timg1}`} />

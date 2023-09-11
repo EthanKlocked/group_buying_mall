@@ -63,15 +63,6 @@ function ErrorFallback({error, resetErrorBoundary}) {
                 홈으로 이동
             </StyledButton>
             <StyledBackgroundImage src={errorCat}/>
-            {
-
-                /*
-                <p>Something went wrong:</p>
-                <pre>{error.message}</pre>
-                <button onClick={resetErrorBoundary}>Try again</button>            
-                */
-            }
-        
         </StyledContainer>
     )
 }
