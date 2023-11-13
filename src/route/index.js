@@ -32,6 +32,7 @@ export { default as Auth } from "./Login/Auth";
 export { default as Kakao } from "./Login/Kakao";
 export { default as Apple } from "./Login/Apple";
 export { default as Vnoti } from "./Login/Vnoti";
+export { default as RoadShow } from "./Login/RoadShow";
 export { default as Welcome } from "./Login/Welcome";
 export { default as PhoneUpdate } from "./Login/PhoneUpdate";
 

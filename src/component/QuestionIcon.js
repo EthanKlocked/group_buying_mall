@@ -15,7 +15,7 @@ const StyledQuestionIcon = styled.span`
 `;
 
 //------------------------------ COMPONENT ----------------------------------
-const QuestionIcon = React.memo(({title = null, content=null}) => {
+const QuestionIcon = React.memo(({title = null, content=null, style={}}) => {
     //state
     const [modal, setModal] = useState(false);
 
@@ -43,7 +43,7 @@ const QuestionIcon = React.memo(({title = null, content=null}) => {
 
     //render
     return (
-        <StyledQuestionIcon onClick={() => setModal(true)}>
+        <StyledQuestionIcon style={style} onClick={() => setModal(true)}>
             <FaQuestionCircle />
             {infoGear}
         </StyledQuestionIcon>

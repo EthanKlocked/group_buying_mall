@@ -198,10 +198,12 @@ const AddressAdd = () => {
 
     const postcodeCallback = (fullAddress, zoneCode) => {
         /*2023-08-22 송파구 lock 05500~05857*/
+        /*
         if(5500 > Number(zoneCode) || 5857 < Number(zoneCode)){
             setAlertModal('onlySongpa');
             return modalClose();
         } 
+        */
 
         modalClose();
         setMainAddress(fullAddress);

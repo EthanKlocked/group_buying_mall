@@ -113,7 +113,7 @@ const MyPage = React.memo(() => {
                         {
                             data.self.point > 0 ? (
                                 <StyledProfilePoint>
-                                    Point <StyledProfilePointNumber>{priceForm(data.self.point, true)}</StyledProfilePointNumber>원&nbsp;&nbsp;<QuestionIcon content={<PointInfo />}/>
+                                    Point <StyledProfilePointNumber>{priceForm(data.self.point, true)}</StyledProfilePointNumber>원&nbsp;&nbsp;<QuestionIcon style={{position:'absolute', top:"-5px"}} content={<PointInfo />}/>
                                 </StyledProfilePoint>                            
                             ) : null
                         }
@@ -382,7 +382,7 @@ const StyledProfileImage = styled.img`
 const StyledProfileInfo = styled.div`
     display:grid;
     align-content:end;
-    grid-template-columns: 1fr 3fr;
+    grid-template-columns: 1fr 1fr;
     justify-content:start;
     background:white;
     padding:2% 5%;
@@ -390,11 +390,13 @@ const StyledProfileInfo = styled.div`
 `;
 const StyledProfileName = styled.span`
     text-align:start;
+    font-size:0.8em;
 `;
 const StyledProfilePoint = styled.span`
     text-align:right;
     font-weight:500;
     font-size:0.8em;
+    position:relative;
 `;
 const StyledProfilePointNumber = styled.span`
     color:crimson;

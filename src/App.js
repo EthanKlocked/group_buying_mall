@@ -20,6 +20,7 @@ import { //routing pages
         Phone, 
         Kakao,
         Apple,
+        RoadShow,
         Vnoti,
         Auth, 
         Welcome,
@@ -126,6 +127,7 @@ const App = () => {
                             <Route path="Login/Kakao" element={<Kakao />} />
                             <Route path="Login/Apple" element={<Apple />} />
                             <Route path="Login/Vnoti" element={<Vnoti />} />
+                            <Route path="Login/RoadShow" element={<RoadShow />} />
                             <Route path="Login/Auth" element={<Auth />} />
                             <Route path="Login/Welcome" element={<Welcome />} />
                             <Route path="Login/PhoneUpdate" element={<PhoneUpdate />} />

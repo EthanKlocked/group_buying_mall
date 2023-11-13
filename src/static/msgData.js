@@ -52,7 +52,8 @@ const msgData = {
     appleIdConnect : "이미 가입된 휴대폰 번호 정보가 존재합니다. 애플 계정과 연결 하시겠습니까?",
     vnotiIntegration : "브이노티 계정 통합",
     vnotiIdConnect : "이미 가입된 휴대폰 번호 정보가 존재합니다. 브이노티 계정과 연결 하시겠습니까?",    
-
+    roadshowIntegration : "로드쇼 계정 통합",
+    roadshowConnect : "이미 가입된 휴대폰 번호 정보가 존재합니다. 로드쇼 계정과 연결 하시겠습니까?",        
 
     orderConfirm : "주문 및 결제가 완료되었습니다.",
     orderCancel : "주문 및 결제를 취소하시겠습니까?",
